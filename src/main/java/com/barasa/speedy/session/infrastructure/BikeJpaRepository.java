@@ -1,4 +1,6 @@
-package com.barasa.speedy.bike.infrastructure;
+package com.barasa.speedy.session.infrastructure;
+
+import com.barasa.speedy.bike.infrastructure.BikeEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;

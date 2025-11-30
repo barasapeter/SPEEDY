@@ -1,5 +1,7 @@
 package com.barasa.speedy.user.infrastructure;
 
+import com.barasa.speedy.shop.infrastructure.ShopEntity;
+import com.barasa.speedy.session.infrastructure.SessionEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

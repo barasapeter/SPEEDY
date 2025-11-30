@@ -29,12 +29,12 @@ public class AuthService {
         // 2. Verify the password
         // The actual stored hashed password would be on the User object (e.g.,
         // user.getHashedPassword())
-        // if (!passwordEncoder.matches(rawPassword, user.getHashedPassword())) {
-        // throw new BadCredentialsException("Invalid username or password");
-        // }
+        if (!passwordEncoder.matches(rawPassword, user.getHashedPassword())) {
+            throw new BadCredentialsException("Invalid username or password");
+        }
 
         // 3. Generate the JWT token
-        String token = "jwtTokenService.generateToken(user.getUuid())";
+        String token = "jwt token";
 
         // 4. Return the response DTO
         return new AuthResponse(token, user.getUuid());

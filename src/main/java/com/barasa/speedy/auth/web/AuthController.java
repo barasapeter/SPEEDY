@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AuthController {
 
     @GetMapping("/")
-    public String helloHtml(Model model) {
+    public String index(Model model) {
         return "index";
     }
 }

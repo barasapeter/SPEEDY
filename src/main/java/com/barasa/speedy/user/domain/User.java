@@ -28,4 +28,8 @@ public class User {
             this.phone = newPhone;
         }
     }
+
+    public String getHashedPassword() {
+        return "hashed pwd";
+    }
 }

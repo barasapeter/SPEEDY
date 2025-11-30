@@ -1,8 +1,10 @@
 package com.barasa.speedy.user.domain;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service; // <-- ADD THIS
 import java.util.UUID;
 
+@Service // <-- AND THIS
 @RequiredArgsConstructor
 public class UserService {
 

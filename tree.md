@@ -47,7 +47,7 @@ src/
 │          │     └─ application/
 │          │           └─ ShopUseCases.java
 │          │
-│          ├─ bike/ <-------------- Reached Here
+│          ├─ bike/
 │          │     ├─ domain/
 │          │     │     ├─ Bike.java
 │          │     │     ├─ BikeRepository.java
@@ -82,7 +82,7 @@ src/
 │          │     └─ application/
 │          │           └─ SessionUseCases.java
 │          │
-│          └─ BikeRentalApplication.java
+│          └─ SpeedyApplication.java
 │
 └─ resources/
 ├─ application.yml

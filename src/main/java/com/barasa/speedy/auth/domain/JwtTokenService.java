@@ -5,3 +5,4 @@ package com.barasa.speedy.auth.domain;
 public class JwtTokenService {
 
 }
+

@@ -56,3 +56,4 @@ public class SessionService implements SessionRepository {
         return report;
     }
 }
+

@@ -1,31 +1,32 @@
 package com.barasa.speedy.shop.domain;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.barasa.speedy.shop.infrastructure.ShopEntity;
+import lombok.*;
+
 import java.util.UUID;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Shop {
 
-    private final UUID uuid;
+    private UUID uuid;
     private String name;
+    private String owner;
     private String location;
-    private final UUID ownerUuid;
     private String addinfo;
 
-    public Shop(UUID uuid, String name, String location, UUID ownerUuid, String addinfo) {
-        this.uuid = uuid;
-        this.name = name;
-        this.location = location;
-        this.ownerUuid = ownerUuid;
-        this.addinfo = addinfo;
-    }
+    public static Shop fromEntity(ShopEntity e) {
+        if (e == null)
+            return null;
 
-    public void relocate(String newLocation) {
-        if (newLocation == null || newLocation.isBlank()) {
-            throw new IllegalArgumentException("New location cannot be empty.");
-        }
-        this.location = newLocation;
+        return Shop.builder()
+                .uuid(e.getUuid())
+                .name(e.getName())
+                .owner(e.getOwner())
+                .location(e.getLocation())
+                .addinfo(e.getAddinfo())
+                .build();
     }
 }

@@ -1,8 +1,6 @@
 package com.barasa.speedy.shop.domain;
 
-import java.util.UUID;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface ShopRepository {
     Shop save(Shop shop);

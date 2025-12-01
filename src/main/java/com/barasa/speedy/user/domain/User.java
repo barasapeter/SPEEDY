@@ -1,35 +1,30 @@
 package com.barasa.speedy.user.domain;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.barasa.speedy.user.infrastructure.UserEntity;
+import lombok.*;
+
 import java.util.UUID;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
-    private final UUID uuid;
+    private UUID uuid;
     private String name;
     private String phone;
-    private String addinfo;
+    private String addinfo; // JSONB text or other metadata
 
-    public User(UUID uuid, String name, String phone, String addinfo) {
-        this.uuid = uuid;
-        this.name = name;
-        this.phone = phone;
-        this.addinfo = addinfo;
-    }
+    public static User fromEntity(UserEntity e) {
+        if (e == null)
+            return null;
 
-    public void updateContactInfo(String newName, String newPhone) {
-        if (newName != null && !newName.isBlank()) {
-            this.name = newName;
-        }
-        if (newPhone != null && !newPhone.isBlank()) {
-            this.phone = newPhone;
-        }
-    }
-
-    public String getHashedPassword() {
-        return "hashed pwd";
+        return User.builder()
+                .uuid(e.getUuid())
+                .name(e.getName())
+                .phone(e.getPhone())
+                .addinfo(e.getAddinfo())
+                .build();
     }
 }

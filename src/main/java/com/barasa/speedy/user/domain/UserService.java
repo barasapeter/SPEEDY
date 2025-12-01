@@ -1,6 +1,7 @@
 package com.barasa.speedy.user.domain;
 
-import com.barasa.speedy.user.infrastructure.*;
+import com.barasa.speedy.user.infrastructure.UserEntity;
+import com.barasa.speedy.user.infrastructure.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ public class UserService implements UserRepository {
 
     @Override
     public User save(User user) {
+
         UserEntity entity = UserEntity.builder()
                 .uuid(user.getUuid())
                 .name(user.getName())
@@ -21,8 +23,8 @@ public class UserService implements UserRepository {
                 .addinfo(user.getAddinfo())
                 .build();
 
-        jpa.save(entity);
-        return user;
+        UserEntity saved = jpa.save(entity);
+        return User.fromEntity(saved);
     }
 
     @Override

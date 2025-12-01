@@ -1,6 +1,7 @@
 package com.barasa.speedy.shop.domain;
 
-import com.barasa.speedy.shop.infrastructure.*;
+import com.barasa.speedy.shop.infrastructure.ShopEntity;
+import com.barasa.speedy.shop.infrastructure.ShopJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,8 @@ public class ShopService implements ShopRepository {
                 .addinfo(shop.getAddinfo())
                 .build();
 
-        jpa.save(entity);
-        return shop;
+        ShopEntity saved = jpa.save(entity);
+        return Shop.fromEntity(saved);
     }
 
     @Override

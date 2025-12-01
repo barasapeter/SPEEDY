@@ -1,31 +1,33 @@
 package com.barasa.speedy.bike.domain;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.barasa.speedy.bike.infrastructure.BikeEntity;
+import lombok.*;
+
 import java.util.UUID;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Bike {
 
-    private final String code;
-
+    private String code;
     private Double rpm;
-
     private UUID shopUuid;
-
     private String addinfo;
 
-    public Bike(String code, Double rpm, UUID shopUuid, String addinfo) {
-        this.code = code;
-        this.rpm = rpm;
-        this.shopUuid = shopUuid;
-        this.addinfo = addinfo;
+    public static Bike fromEntity(BikeEntity entity) {
+        return Bike.builder()
+                .code(entity.getCode())
+                .rpm(entity.getRpm())
+                .shopUuid(entity.getShop() != null ? entity.getShop().getUuid() : null)
+                .addinfo(entity.getAddinfo())
+                .build();
     }
 
     public void updateRentalRate(Double newRpm) {
-        if (newRpm <= 0) {
-            throw new IllegalArgumentException("Rental rate must be positive.");
+        if (newRpm == null || newRpm <= 0) {
+            throw new IllegalArgumentException("RPM must be positive.");
         }
         this.rpm = newRpm;
     }

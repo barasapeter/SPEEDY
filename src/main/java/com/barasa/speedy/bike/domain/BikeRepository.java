@@ -6,7 +6,7 @@ import java.util.Optional;
 public interface BikeRepository {
     Bike save(Bike bike);
 
-    Optional<Bike> findByCode(String code);
-
     List<Bike> findAll();
+
+    Optional<Bike> findByCode(String code);
 }

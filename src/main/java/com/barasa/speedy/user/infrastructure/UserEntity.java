@@ -1,36 +1,36 @@
 package com.barasa.speedy.user.infrastructure;
 
-import com.barasa.speedy.shop.infrastructure.ShopEntity;
 import com.barasa.speedy.session.infrastructure.SessionEntity;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Builder;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user")
-@Data
+@Table(name = "users")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "UUID")
     private UUID uuid;
 
     private String name;
-
     private String phone;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "jsonb")
     private String addinfo;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ShopEntity> ownedShops;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SessionEntity> sessions;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<SessionEntity> sessions = new ArrayList<>();
 }

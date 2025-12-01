@@ -11,36 +11,37 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 @Entity
 @Table(name = "session_report")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SessionReportEntity {
 
     @Id
-    @Column(columnDefinition = "UUID")
+    @Column(name = "session_uuid", columnDefinition = "UUID")
     private UUID sessionUuid;
-
-    private Long dim;
-
-    private String crid;
-
-    private String txndesc;
-
-    private BigDecimal amountCharged;
-
-    private String txnCode;
-
-    @Column(columnDefinition = "TEXT")
-    private String logs;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "session_uuid", nullable = false)
+    @JoinColumn(name = "session_uuid")
     private SessionEntity session;
+
+    private Integer dim;
+    private String crid;
+    private String txndesc;
+    private BigDecimal amountCharged;
+    private String txnCode;
+
+    @Column(columnDefinition = "jsonb")
+    private String logs;
 }

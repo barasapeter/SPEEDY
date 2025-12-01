@@ -1,16 +1,13 @@
 package com.barasa.speedy.shop.domain;
 
-import java.util.Optional;
-import java.util.List;
 import java.util.UUID;
+import java.util.List;
+import java.util.Optional;
 
 public interface ShopRepository {
-
-    Optional<Shop> findByUuid(UUID uuid);
-
-    List<Shop> findByOwnerUuid(UUID ownerUuid);
-
     Shop save(Shop shop);
 
-    void delete(Shop shop);
+    Optional<Shop> findById(UUID id);
+
+    List<Shop> findAll();
 }

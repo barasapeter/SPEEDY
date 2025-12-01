@@ -1,21 +1,38 @@
 package com.barasa.speedy.shop.domain;
 
+import com.barasa.speedy.shop.infrastructure.*;
 import lombok.RequiredArgsConstructor;
-import java.util.UUID;
+import org.springframework.stereotype.Service;
 
+import java.util.*;
+
+@Service
 @RequiredArgsConstructor
-public class ShopService {
+public class ShopService implements ShopRepository {
 
-    private final ShopRepository shopRepository;
+    private final ShopJpaRepository jpa;
 
-    public Shop getShopById(UUID shopUuid) {
-        return shopRepository.findByUuid(shopUuid)
-                .orElseThrow(() -> new RuntimeException("Shop not found with UUID: " + shopUuid));
+    @Override
+    public Shop save(Shop shop) {
+        ShopEntity entity = ShopEntity.builder()
+                .uuid(shop.getUuid())
+                .name(shop.getName())
+                .owner(shop.getOwner())
+                .location(shop.getLocation())
+                .addinfo(shop.getAddinfo())
+                .build();
+
+        jpa.save(entity);
+        return shop;
     }
 
-    public Shop registerNewShop(String name, String location, UUID ownerUuid) {
-        UUID newUuid = UUID.randomUUID();
-        Shop newShop = new Shop(newUuid, name, location, ownerUuid, null);
-        return shopRepository.save(newShop);
+    @Override
+    public Optional<Shop> findById(UUID id) {
+        return jpa.findById(id).map(Shop::fromEntity);
+    }
+
+    @Override
+    public List<Shop> findAll() {
+        return jpa.findAll().stream().map(Shop::fromEntity).toList();
     }
 }

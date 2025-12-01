@@ -1,24 +1,42 @@
 package com.barasa.speedy.bike.domain;
 
+import com.barasa.speedy.bike.infrastructure.BikeEntity;
+import com.barasa.speedy.bike.infrastructure.BikeJpaRepository;
+import com.barasa.speedy.bike.domain.BikeRepository;
+import com.barasa.speedy.shop.infrastructure.ShopEntity;
+
 import lombok.RequiredArgsConstructor;
-import java.util.UUID;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
+@Service
 @RequiredArgsConstructor
-public class BikeService {
+public class BikeService implements BikeRepository {
 
-    private final BikeRepository bikeRepository;
+    private final BikeJpaRepository jpa;
 
-    public Bike getBikeByCode(String code) {
-        return bikeRepository.findByCode(code)
-                .orElseThrow(() -> new RuntimeException("Bike not found with code: " + code));
+    @Override
+    public Bike save(Bike bike) {
+        BikeEntity entity = BikeEntity.builder()
+                .code(bike.getCode())
+                .rpm(bike.getRpm())
+                .addinfo(bike.getAddinfo())
+                .shop(ShopEntity.builder().uuid(bike.getShopUuid()).build())
+                .build();
+
+        jpa.save(entity);
+        return bike;
     }
 
-    public Bike registerNewBike(String code, Double rpm, UUID shopUuid) {
-        if (bikeRepository.findByCode(code).isPresent()) {
-            throw new IllegalArgumentException("Bike code already exists.");
-        }
+    @Override
+    public List<Bike> findAll() {
+        return jpa.findAll().stream().map(Bike::fromEntity).toList();
+    }
 
-        Bike newBike = new Bike(code, rpm, shopUuid, null);
-        return bikeRepository.save(newBike);
+    @Override
+    public Optional<Bike> findByCode(String code) {
+        return jpa.findById(code).map(Bike::fromEntity);
     }
 }

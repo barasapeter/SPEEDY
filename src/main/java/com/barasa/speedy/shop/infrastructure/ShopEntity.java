@@ -1,37 +1,37 @@
 package com.barasa.speedy.shop.infrastructure;
 
-import com.barasa.speedy.user.infrastructure.UserEntity;
 import com.barasa.speedy.bike.infrastructure.BikeEntity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "shop")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ShopEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "UUID")
     private UUID uuid;
 
     private String name;
-
+    private String owner;
     private String location;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "jsonb")
     private String addinfo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner", nullable = false)
-    private UserEntity owner;
-
-    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BikeEntity> inventory;
+    @OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
+    private List<BikeEntity> bikes = new ArrayList<>();
 }

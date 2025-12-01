@@ -1,0 +1,83 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const registerButton = document.querySelector('button[type="button"]');
+
+    registerButton.addEventListener('click', async () => {
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (!name || !phone || !email || !password || !confirmPassword) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops!',
+                text: 'Please fill out all fields.'
+            });
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Password mismatch',
+                text: 'Passwords do not match.'
+            });
+            return;
+        }
+
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to create an account?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, create it!',
+            cancelButtonText: 'Cancel'
+        });
+
+        if (!result.isConfirmed) return;
+
+        Swal.fire({
+            title: 'Creating your account...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        const payload = { name, phone, email, password };
+
+        try {
+            const response = await fetch('/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            Swal.close();
+
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: data.message || 'Account created successfully.'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed',
+                    text: data.message || 'Something went wrong.'
+                });
+            }
+        } catch (error) {
+            Swal.close();
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Network error. Please try again.'
+            });
+        }
+    });
+});

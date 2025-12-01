@@ -1,45 +1,36 @@
 package com.barasa.speedy.session.domain;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.barasa.speedy.session.infrastructure.SessionReportEntity;
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SessionReport {
 
-    private final UUID sessionUuid;
-
-    private Long durationInMinutes;
-    private String checkoutRequestId;
-    private String transactionDescription;
+    private UUID sessionUuid;
+    private Integer dim;
+    private String crid;
+    private String txndesc;
     private BigDecimal amountCharged;
-    private String transactionCode;
+    private String txnCode;
     private String logs;
 
-    public SessionReport(
-            UUID sessionUuid,
-            Long durationInMinutes,
-            String checkoutRequestId,
-            String transactionDescription,
-            BigDecimal amountCharged,
-            String transactionCode,
-            String logs) {
-        this.sessionUuid = sessionUuid;
-        this.durationInMinutes = durationInMinutes;
-        this.checkoutRequestId = checkoutRequestId;
-        this.transactionDescription = transactionDescription;
-        this.amountCharged = amountCharged;
-        this.transactionCode = transactionCode;
-        this.logs = logs;
-    }
-
-    public BigDecimal calculateFee(Double rpm) {
-        if (durationInMinutes == null || rpm == null) {
-            return BigDecimal.ZERO;
-        }
-        return BigDecimal.valueOf(durationInMinutes)
-                .multiply(BigDecimal.valueOf(rpm));
+    public static SessionReport fromEntity(SessionReportEntity e) {
+        if (e == null)
+            return null;
+        return SessionReport.builder()
+                .sessionUuid(e.getSession() != null ? e.getSession().getUuid() : e.getSessionUuid())
+                .dim(e.getDim())
+                .crid(e.getCrid())
+                .txndesc(e.getTxndesc())
+                .amountCharged(e.getAmountCharged())
+                .txnCode(e.getTxnCode())
+                .logs(e.getLogs())
+                .build();
     }
 }

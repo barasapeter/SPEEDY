@@ -13,8 +13,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> authRegister() {
         Map<String, String> returnMessage = new HashMap<>();
-        returnMessage.put("message", "Hello From Hello With Status Code!");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(returnMessage);
+        returnMessage.put("message", "Creating User...");
+        return ResponseEntity.status(HttpStatus.OK).body(returnMessage);
     }
 
 }

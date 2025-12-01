@@ -1,6 +1,24 @@
 package com.barasa.speedy.config;
 
-// Filter Chain Integration. This is where you configure Spring Security. You will inject a custom JWT filter (see below) into the request pipeline to run before the application's controllers. You will also specify which paths are public (/api/auth/login) and which are protected.
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
 public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/register", "/auth/login").permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults());
+
+        return http.build();
+    }
 
 }

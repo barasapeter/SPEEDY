@@ -7,7 +7,6 @@ import java.util.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import com.barasa.speedy.common.util.JsonMapConverter;
 
 @Entity
 @Table(name = "shop")

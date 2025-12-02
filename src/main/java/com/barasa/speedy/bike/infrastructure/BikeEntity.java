@@ -1,6 +1,5 @@
 package com.barasa.speedy.bike.infrastructure;
 
-import com.barasa.speedy.common.util.JsonMapConverter;
 import com.barasa.speedy.shop.infrastructure.ShopEntity;
 import jakarta.persistence.*;
 import lombok.*;

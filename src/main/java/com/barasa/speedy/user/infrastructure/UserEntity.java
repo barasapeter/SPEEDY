@@ -4,8 +4,11 @@ import com.barasa.speedy.common.util.JsonMapConverter;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.UUID;
+
 import java.util.*;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "users")
@@ -23,6 +26,7 @@ public class UserEntity {
     private String phone;
 
     @Column(columnDefinition = "jsonb")
-    @Convert(converter = JsonMapConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> addinfo;
+
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.barasa.speedy.common.util.PhoneNumberValidatorAndStandardizer;
 import com.barasa.speedy.user.domain.User;
 import com.barasa.speedy.user.domain.UserService;
+import com.barasa.speedy.auth.domain.JwtUtil;
 
 @RestController
 @RequestMapping("/auth")
@@ -75,28 +76,30 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> authLogin(@RequestBody Map<String, Object> payload) {
-        Map<String, String> loginReturnMessage = new HashMap<>();
+    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        String password = payload.get("password");
 
-        String email = (String) payload.get("email");
-        String password = (String) payload.get("password");
+        Optional<User> userOpt = userService.findByEmail(email);
+        Map<String, String> response = new HashMap<>();
 
-        Optional<User> queriedUser = userService.findByEmail(email);
-
-        if (queriedUser.isPresent()) {
-            User user = queriedUser.get();
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
             String storedPassword = (String) user.getAddinfo().get("password");
-
             if (storedPassword.equals(password)) {
-                loginReturnMessage.put("message", "Login successful");
-                return ResponseEntity.ok(loginReturnMessage);
+                JwtUtil jwtUtil = new JwtUtil();
+                String token = jwtUtil.generateToken(email);
+                response.put("message", "Login: accepted");
+                response.put("token", token);
+                response.put("cookie", user.getUuid().toString());
+                return ResponseEntity.ok(response);
             } else {
-                loginReturnMessage.put("message", "Login failed, the sign-in details are incorrect.");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginReturnMessage);
+                response.put("message", "Login Failed. The sign-in details are incorrect.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
         } else {
-            loginReturnMessage.put("message", "User not found. Check your credentials.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(loginReturnMessage);
+            response.put("message", "User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 

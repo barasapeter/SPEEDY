@@ -42,7 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
             Swal.close();
 
             if (response.ok) {
-                window.location.href = "/dashboard";
+                Swal.fire({
+                    icon: 'success',
+                    title: data.title,
+                    text: data.message
+                }).then(() => {
+                    window.location.href = "/dashboard";
+                });
             } else {
                 Swal.fire({
                     icon: 'warning',

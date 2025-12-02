@@ -1,13 +1,20 @@
 package com.barasa.speedy.auth.web;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.barasa.speedy.user.domain.UserService;
+import com.barasa.speedy.common.util.PhoneNumberValidatorAndStandardizer;
 import com.barasa.speedy.user.domain.User;
-import com.barasa.speedy.common.util.*;
+import com.barasa.speedy.user.domain.UserService;
 
 @RestController
 @RequestMapping("/auth")
@@ -70,7 +77,27 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> authLogin(@RequestBody Map<String, Object> payload) {
         Map<String, String> loginReturnMessage = new HashMap<>();
-        return ResponseEntity.ok(loginReturnMessage);
+
+        String email = (String) payload.get("email");
+        String password = (String) payload.get("password");
+
+        Optional<User> queriedUser = userService.findByEmail(email);
+
+        if (queriedUser.isPresent()) {
+            User user = queriedUser.get();
+            String storedPassword = (String) user.getAddinfo().get("password");
+
+            if (storedPassword.equals(password)) {
+                loginReturnMessage.put("message", "Login successful");
+                return ResponseEntity.ok(loginReturnMessage);
+            } else {
+                loginReturnMessage.put("message", "Login failed, the sign-in details are incorrect.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginReturnMessage);
+            }
+        } else {
+            loginReturnMessage.put("message", "User not found. Check your credentials.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(loginReturnMessage);
+        }
     }
 
 }

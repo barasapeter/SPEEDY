@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="display: flex; flex-direction: column; align-items: center;">
                 <img src="hold-on.gif" alt="Loading..." 
                     style="width: 80px; height: 80px;">
-                <h1 style="margin: 15px;">Creating Account</h1>
-                <p>Hold on, we are verifying your information...</p>
+                <h1 style="margin: 15px;">Authenticating</h1>
+                <p>Hold on, we are verifying your sign-in credentials...</p>
                 </div>
             `,
             showConfirmButton: false,
@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 window.location.href = "/dashboard";
-
             } else {
                 Swal.fire({
                     icon: 'warning',

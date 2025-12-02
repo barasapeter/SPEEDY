@@ -56,7 +56,8 @@ public class AuthController {
         userService.save(user);
 
         returnMessage.put("title", "Bravo!");
-        returnMessage.put("message", "User account created successfully! Please Log in to get started.");
+        returnMessage.put("message",
+                "User account created successfully! Please Log in and Enjoy the full Speedy Experience.");
         return ResponseEntity.ok(returnMessage);
     }
 

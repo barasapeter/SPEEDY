@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 @Entity
 @Table(name = "bike")
 @Getter
@@ -25,6 +28,6 @@ public class BikeEntity {
     private ShopEntity shop;
 
     @Column(columnDefinition = "jsonb")
-    @Convert(converter = JsonMapConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> addinfo;
 }

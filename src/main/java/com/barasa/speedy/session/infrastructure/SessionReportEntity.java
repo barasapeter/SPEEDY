@@ -1,13 +1,12 @@
 package com.barasa.speedy.session.infrastructure;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 import java.util.*;
 
-import com.barasa.speedy.common.util.JsonMapConverter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -47,6 +46,6 @@ public class SessionReportEntity {
     private String txnCode;
 
     @Column(columnDefinition = "jsonb")
-    @Convert(converter = JsonMapConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> addinfo;
 }

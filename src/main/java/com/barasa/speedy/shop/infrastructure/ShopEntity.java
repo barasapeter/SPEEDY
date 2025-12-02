@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
 
-import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import com.barasa.speedy.common.util.JsonMapConverter;
 
@@ -25,6 +26,6 @@ public class ShopEntity {
     private String location;
 
     @Column(columnDefinition = "jsonb")
-    @Convert(converter = JsonMapConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> addinfo;
 }

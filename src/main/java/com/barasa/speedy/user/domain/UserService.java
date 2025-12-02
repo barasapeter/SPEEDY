@@ -38,6 +38,11 @@ public class UserService implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByEmail(String email) {
+        return jpa.findByEmail(email).map(User::fromEntity);
+    }
+
+    @Override
     public List<User> findAll() {
         return jpa.findAll().stream().map(User::fromEntity).toList();
     }

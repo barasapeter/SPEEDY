@@ -42,6 +42,12 @@ public class AuthController {
             return ResponseEntity.badRequest().body(returnMessage);
         }
 
+        if (userService.findByEmail(email).isPresent()) {
+            returnMessage.put("title", "Email Registered");
+            returnMessage.put("message", "Email is already registered.");
+            return ResponseEntity.badRequest().body(returnMessage);
+        }
+
         Map<String, Object> addinfo = new HashMap<>();
         addinfo.put("email", email);
         addinfo.put("password", password);

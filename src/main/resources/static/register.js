@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } else {
                 Swal.fire({
-                    icon: 'error',
+                    icon: 'warning',
                     title: data.title,
                     text: data.message || 'Something went wrong.'
                 });
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             Swal.close();
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: 'System Error',
                 text: 'Network error. Please try again.'
             });
         }

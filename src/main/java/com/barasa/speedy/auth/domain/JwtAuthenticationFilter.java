@@ -1,12 +1,14 @@
 package com.barasa.speedy.auth.domain;
 
+import java.io.IOException;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -24,15 +26,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             if (jwtUtil.validateToken(token)) {
-                // You can optionally set authentication in SecurityContext here if needed
-                request.setAttribute("cookie", jwtUtil.extractUsername(token));
+                request.setAttribute("cookie", jwtUtil.extractUserUuid(token));
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("{\"error\": \"Invalid JWT\"}");
                 return;
             }
-        } else if (!request.getRequestURI().startsWith("/auth")) {
-            // block any non-auth requests without token
+        } else if (!(request.getRequestURI().equals("/") || request.getRequestURI().startsWith("/auth"))
+                || request.getRequestURI().endsWith(".js")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("{\"error\": \"Missing JWT\"}");
             return;

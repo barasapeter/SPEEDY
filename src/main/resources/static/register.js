@@ -61,13 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Success!',
-                    text: data.message || 'Account created successfully.'
+                    title: data.title,
+                    text: data.message || 'Account created successfully.',
+                    allowOutsideClick: false
+                }).then(() => {
+                    window.location.href = '/login';
                 });
+
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Failed',
+                    title: data.title,
                     text: data.message || 'Something went wrong.'
                 });
             }

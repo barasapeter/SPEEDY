@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.barasa.speedy.user.domain.UserService;
 import com.barasa.speedy.user.domain.User;
+import com.barasa.speedy.common.util.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,8 +28,17 @@ public class AuthController {
         String email = (String) payload.get("email");
         String password = (String) payload.get("password");
 
+        phone = PhoneNumberValidatorAndStandardizer.standardizePhone(phone);
+        if (phone == null) {
+            returnMessage.put("title", "Invalid Number");
+            returnMessage.put("message",
+                    "Failed to create account. Phone number " + phone + " is invalid. Please try again.");
+            return ResponseEntity.badRequest().body(returnMessage);
+        }
+
         if (userService.findByPhone(phone).isPresent()) {
-            returnMessage.put("message", "Phone number already registered");
+            returnMessage.put("title", "Number Registered");
+            returnMessage.put("message", "Phone number already registered.");
             return ResponseEntity.badRequest().body(returnMessage);
         }
 
@@ -45,6 +55,7 @@ public class AuthController {
 
         userService.save(user);
 
+        returnMessage.put("title", "Bravo!");
         returnMessage.put("message", "User account created successfully! Please Log in to get started.");
         return ResponseEntity.ok(returnMessage);
     }

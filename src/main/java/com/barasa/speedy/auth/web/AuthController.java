@@ -21,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> authRegister(@RequestBody Map<String, Object> payload) {
-        Map<String, String> returnMessage = new HashMap<>();
+        Map<String, String> registerReturnMessage = new HashMap<>();
 
         String name = (String) payload.get("name");
         String phone = (String) payload.get("phone");
@@ -30,22 +30,22 @@ public class AuthController {
 
         phone = PhoneNumberValidatorAndStandardizer.standardizePhone(phone);
         if (phone == null) {
-            returnMessage.put("title", "Invalid Number");
-            returnMessage.put("message",
+            registerReturnMessage.put("title", "Invalid Number");
+            registerReturnMessage.put("message",
                     "Failed to create account. Phone number " + phone + " is invalid. Please try again.");
-            return ResponseEntity.badRequest().body(returnMessage);
+            return ResponseEntity.badRequest().body(registerReturnMessage);
         }
 
         if (userService.findByPhone(phone).isPresent()) {
-            returnMessage.put("title", "Number Registered");
-            returnMessage.put("message", "Phone number already registered.");
-            return ResponseEntity.badRequest().body(returnMessage);
+            registerReturnMessage.put("title", "Number Registered");
+            registerReturnMessage.put("message", "Phone number already registered.");
+            return ResponseEntity.badRequest().body(registerReturnMessage);
         }
 
         if (userService.findByEmail(email).isPresent()) {
-            returnMessage.put("title", "Email Registered");
-            returnMessage.put("message", "Email is already registered.");
-            return ResponseEntity.badRequest().body(returnMessage);
+            registerReturnMessage.put("title", "Email Registered");
+            registerReturnMessage.put("message", "Email is already registered.");
+            return ResponseEntity.badRequest().body(registerReturnMessage);
         }
 
         Map<String, Object> addinfo = new HashMap<>();
@@ -61,10 +61,16 @@ public class AuthController {
 
         userService.save(user);
 
-        returnMessage.put("title", "Bravo!");
-        returnMessage.put("message",
+        registerReturnMessage.put("title", "Bravo!");
+        registerReturnMessage.put("message",
                 "User account created successfully! Please Log in and Enjoy the full Speedy Experience.");
-        return ResponseEntity.ok(returnMessage);
+        return ResponseEntity.ok(registerReturnMessage);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> authLogin(@RequestBody Map<String, Object> payload) {
+        Map<String, String> loginReturnMessage = new HashMap<>();
+        return ResponseEntity.ok(loginReturnMessage);
     }
 
 }

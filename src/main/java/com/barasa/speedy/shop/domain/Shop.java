@@ -2,6 +2,7 @@ package com.barasa.speedy.shop.domain;
 
 import com.barasa.speedy.shop.infrastructure.ShopEntity;
 import lombok.*;
+import java.util.*;
 
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ public class Shop {
     private String name;
     private String owner;
     private String location;
-    private String addinfo;
+    private Map<String, Object> addinfo;
 
     public static Shop fromEntity(ShopEntity e) {
         if (e == null)

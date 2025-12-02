@@ -68,7 +68,7 @@ public class SessionService implements SessionRepository {
                 .txndesc(report.getTxndesc())
                 .amountCharged(report.getAmountCharged())
                 .txnCode(report.getTxnCode())
-                .logs(report.getLogs())
+                .addinfo(report.getAddinfo())
                 .build();
 
         SessionReportEntity saved = reportJpa.save(entity);

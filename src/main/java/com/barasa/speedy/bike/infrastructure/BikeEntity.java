@@ -1,8 +1,10 @@
 package com.barasa.speedy.bike.infrastructure;
 
+import com.barasa.speedy.common.util.JsonMapConverter;
 import com.barasa.speedy.shop.infrastructure.ShopEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.*;
 
 @Entity
 @Table(name = "bike")
@@ -23,5 +25,6 @@ public class BikeEntity {
     private ShopEntity shop;
 
     @Column(columnDefinition = "jsonb")
-    private String addinfo;
+    @Convert(converter = JsonMapConverter.class)
+    private Map<String, Object> addinfo;
 }

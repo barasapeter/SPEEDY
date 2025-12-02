@@ -24,5 +24,5 @@ public class UserEntity {
 
     @Column(columnDefinition = "jsonb")
     @Convert(converter = JsonMapConverter.class)
-    private Map<String, Object> addinfo; // now stored as JSONB
+    private Map<String, Object> addinfo;
 }

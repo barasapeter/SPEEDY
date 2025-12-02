@@ -2,6 +2,7 @@ package com.barasa.speedy.bike.domain;
 
 import com.barasa.speedy.bike.infrastructure.BikeEntity;
 import lombok.*;
+import java.util.*;
 
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public class Bike {
     private String code;
     private Double rpm;
     private UUID shopUuid;
-    private String addinfo;
+    private Map<String, Object> addinfo;
 
     public static Bike fromEntity(BikeEntity entity) {
         return Bike.builder()

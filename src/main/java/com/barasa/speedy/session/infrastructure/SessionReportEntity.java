@@ -2,8 +2,12 @@ package com.barasa.speedy.session.infrastructure;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.util.*;
+
+import com.barasa.speedy.common.util.JsonMapConverter;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -43,5 +47,6 @@ public class SessionReportEntity {
     private String txnCode;
 
     @Column(columnDefinition = "jsonb")
-    private String logs;
+    @Convert(converter = JsonMapConverter.class)
+    private Map<String, Object> addinfo;
 }

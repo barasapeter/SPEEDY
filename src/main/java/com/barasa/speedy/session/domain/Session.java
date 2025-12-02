@@ -2,6 +2,7 @@ package com.barasa.speedy.session.domain;
 
 import com.barasa.speedy.session.infrastructure.SessionEntity;
 import lombok.*;
+import java.util.*;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -19,7 +20,8 @@ public class Session {
     private Instant stopTime;
 
     public static Session fromEntity(SessionEntity e) {
-        if (e == null) return null;
+        if (e == null)
+            return null;
         return Session.builder()
                 .uuid(e.getUuid())
                 .bikeCode(e.getBike() != null ? e.getBike().getCode() : null)
@@ -29,12 +31,8 @@ public class Session {
                 .build();
     }
 
-    /**
-     * Convenience: produce a SessionReport domain object from this session.
-     * Caller must populate fields like amountCharged/txnCode as needed.
-     */
     public SessionReport toReport(Integer dim, String crid, String txndesc,
-                                  java.math.BigDecimal amountCharged, String txnCode, String logs) {
+            java.math.BigDecimal amountCharged, String txnCode, Map<String, Object> addinfo) {
         return SessionReport.builder()
                 .sessionUuid(this.uuid)
                 .dim(dim)
@@ -42,7 +40,7 @@ public class Session {
                 .txndesc(txndesc)
                 .amountCharged(amountCharged)
                 .txnCode(txnCode)
-                .logs(logs)
+                .addinfo(addinfo)
                 .build();
     }
 }

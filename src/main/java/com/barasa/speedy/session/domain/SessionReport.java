@@ -2,6 +2,7 @@ package com.barasa.speedy.session.domain;
 
 import com.barasa.speedy.session.infrastructure.SessionReportEntity;
 import lombok.*;
+import java.util.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -18,7 +19,7 @@ public class SessionReport {
     private String txndesc;
     private BigDecimal amountCharged;
     private String txnCode;
-    private String logs;
+    private Map<String, Object> addinfo;
 
     public static SessionReport fromEntity(SessionReportEntity e) {
         if (e == null)
@@ -30,7 +31,7 @@ public class SessionReport {
                 .txndesc(e.getTxndesc())
                 .amountCharged(e.getAmountCharged())
                 .txnCode(e.getTxnCode())
-                .logs(e.getLogs())
+                .addinfo(e.getAddinfo())
                 .build();
     }
 }

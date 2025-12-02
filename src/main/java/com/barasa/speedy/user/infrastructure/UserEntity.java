@@ -1,8 +1,11 @@
 package com.barasa.speedy.user.infrastructure;
 
+import com.barasa.speedy.common.util.JsonMapConverter;
+
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -20,5 +23,6 @@ public class UserEntity {
     private String phone;
 
     @Column(columnDefinition = "jsonb")
-    private String addinfo;
+    @Convert(converter = JsonMapConverter.class)
+    private Map<String, Object> addinfo; // now stored as JSONB
 }

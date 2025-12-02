@@ -22,9 +22,11 @@ public class JsonMapConverter implements AttributeConverter<Map<String, Object>,
     @Override
     public Map<String, Object> convertToEntityAttribute(String dbData) {
         try {
-            return mapper.readValue(dbData, Map.class);
+            return mapper.readValue(dbData, new com.fasterxml.jackson.core.type.TypeReference<Map<String, Object>>() {
+            });
         } catch (Exception e) {
             throw new IllegalArgumentException("Could not convert JSON string to map.", e);
         }
     }
+
 }

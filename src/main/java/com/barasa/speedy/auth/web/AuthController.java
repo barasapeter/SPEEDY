@@ -27,6 +27,11 @@ public class AuthController {
         String email = (String) payload.get("email");
         String password = (String) payload.get("password");
 
+        if (userService.findByPhone(phone).isPresent()) {
+            returnMessage.put("message", "Phone number already registered");
+            return ResponseEntity.badRequest().body(returnMessage);
+        }
+
         Map<String, Object> addinfo = new HashMap<>();
         addinfo.put("email", email);
         addinfo.put("password", password);
@@ -40,7 +45,7 @@ public class AuthController {
 
         userService.save(user);
 
-        returnMessage.put("message", "User created successfully");
+        returnMessage.put("message", "User account created successfully! Please Log in to get started.");
         return ResponseEntity.ok(returnMessage);
     }
 

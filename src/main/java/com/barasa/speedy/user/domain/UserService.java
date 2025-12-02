@@ -33,6 +33,11 @@ public class UserService implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByPhone(String phone) {
+        return jpa.findByPhone(phone).map(User::fromEntity);
+    }
+
+    @Override
     public List<User> findAll() {
         return jpa.findAll().stream().map(User::fromEntity).toList();
     }

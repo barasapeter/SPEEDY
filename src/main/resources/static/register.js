@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     text: data.message || 'Account created successfully.',
                     allowOutsideClick: false
                 }).then(() => {
-                    window.location.href = '/login';
+                    history.back();
                 });
 
             } else {

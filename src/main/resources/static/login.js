@@ -42,15 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             Swal.close();
 
             if (response.ok) {
-                localStorage.setItem('jwt', data.token);
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Login successful',
-                    text: data.message
-                }).then(() => {
-                    window.location.href = "/dashboard";
-                });
+                window.location.href = "/dashboard";
 
             } else {
                 Swal.fire({

@@ -97,7 +97,7 @@ public class AuthController {
         String storedPassword = (String) user.getAddinfo().get("password");
 
         if (!storedPassword.equals(password)) {
-            response.put("message", "Login failed");
+            response.put("message", "Login failed, the sign-in details are incorrect.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 

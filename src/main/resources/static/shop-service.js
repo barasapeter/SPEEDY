@@ -45,23 +45,50 @@ function openShopDialog() {
 
       return { name, location };
     }
-  }).then(result => {
+  }).then(async (result) => {
     if (result.isConfirmed) {
-      console.log("Saved shop:", result.value);
-      Swal.fire({
-        icon: "success",
-        title: "Shop Saved",
-        text: "Your shop details have been stored successfully.",
-        timer: 1600,
-        showConfirmButton: false,
-        background: "#EFF6FF",
-        iconColor: "#1D4ED8",
-        customClass: {
-          title: "font-semibold text-gray-800",
-          content: "text-gray-700",
-          popup: "rounded-2xl shadow-lg p-6"
+      const shopData = result.value;
+
+      try {
+        const response = await fetch("/shop/update", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(shopData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to save shop details.");
         }
-      });
+
+        Swal.fire({
+          icon: "success",
+          title: "Shop Saved",
+          text: data.message,
+          background: "#EFF6FF",
+          customClass: {
+            title: "font-semibold text-gray-800",
+            content: "text-gray-700",
+            popup: "rounded-2xl shadow-lg p-6"
+          }
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.message,
+          background: "#FEF2F2",
+          iconColor: "#B91C1C",
+          customClass: {
+            title: "font-semibold text-gray-800",
+            content: "text-gray-700",
+            popup: "rounded-2xl shadow-lg p-6"
+          }
+        });
+      }
     }
   });
 }

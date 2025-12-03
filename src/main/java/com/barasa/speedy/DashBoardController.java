@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.barasa.speedy.shop.domain.Shop;
 import com.barasa.speedy.shop.domain.ShopService;
 import com.barasa.speedy.user.domain.User;
 import com.barasa.speedy.user.domain.UserService;
@@ -55,5 +54,4 @@ public class DashBoardController {
         return "dashboard";
     }
 
-    
 }

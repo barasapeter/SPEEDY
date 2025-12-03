@@ -32,8 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.getWriter().write("{\"error\": \"Invalid JWT\"}");
                 return;
             }
-        } else if (!(request.getRequestURI().equals("/") || request.getRequestURI().startsWith("/auth"))
-                || request.getRequestURI().endsWith(".js")) {
+        } else if (!(request.getRequestURI().equals("/") || !request.getRequestURI().startsWith("/auth"))) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("{\"error\": \"Missing JWT\"}");
             return;
@@ -42,3 +41,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+

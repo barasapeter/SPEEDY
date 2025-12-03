@@ -7,19 +7,47 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.barasa.speedy.user.domain.User;
+import com.barasa.speedy.user.domain.UserService;
+
+import java.util.*;
+
 @Controller
 public class DashBoardController {
 
+    private final UserService userService;
+
+    public DashBoardController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/dashboard")
     public String index(HttpServletRequest request, Model model, HttpSession session) {
-        String userUuid = (String) session.getAttribute("USER_ID");
+        String userUuidStr = (String) session.getAttribute("USER_ID");
 
-        System.out.println("User UUID: " + userUuid);
-
-        if (userUuid == null) {
+        if (userUuidStr == null) {
             return "redirect:/";
         }
 
+        UUID userUuid;
+        try {
+            userUuid = UUID.fromString(userUuidStr);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/";
+        }
+
+        Optional<User> userOpt = userService.findById(userUuid);
+
+        if (userOpt.isEmpty()) {
+            return "redirect:/";
+        }
+
+        User user = userOpt.get();
+
+        model.addAttribute("name", user.getName());
+        model.addAttribute("addinfo", user.getAddInfo());
+
         return "dashboard";
     }
+
 }

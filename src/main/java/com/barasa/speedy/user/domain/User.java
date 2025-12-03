@@ -32,4 +32,16 @@ public class User {
     public String getID() {
         return this.uuid.toString();
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public Map<String, Object> getAddInfo() {
+        return this.addinfo;
+    }
 }

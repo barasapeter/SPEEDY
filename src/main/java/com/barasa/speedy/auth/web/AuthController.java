@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.barasa.speedy.common.util.PhoneNumberValidatorAndStandardizer;
 import com.barasa.speedy.user.domain.User;
 import com.barasa.speedy.user.domain.UserService;
-// import com.barasa.speedy.auth.domain.JwtUtil;
 
 import jakarta.servlet.http.HttpSession;
 

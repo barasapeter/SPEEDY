@@ -28,4 +28,8 @@ public class User {
                 .addinfo(e.getAddinfo())
                 .build();
     }
+
+    public String getID() {
+        return this.uuid.toString();
+    }
 }

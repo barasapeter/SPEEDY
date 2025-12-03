@@ -17,6 +17,8 @@ import com.barasa.speedy.user.domain.User;
 import com.barasa.speedy.user.domain.UserService;
 // import com.barasa.speedy.auth.domain.JwtUtil;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -76,31 +78,33 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<Map<String, String>> login(
+            @RequestBody Map<String, String> payload,
+            HttpSession session) {
+
         String email = payload.get("email");
         String password = payload.get("password");
 
         Optional<User> userOpt = userService.findByEmail(email);
         Map<String, String> response = new HashMap<>();
 
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            String storedPassword = (String) user.getAddinfo().get("password");
-            if (storedPassword.equals(password)) {
-                // JwtUtil jwtUtil = new JwtUtil();
-                // String token = jwtUtil.generateToken(email);
-                response.put("message", "Login: accepted");
-                // response.put("token", token);
-                // response.put("cookie", user.getUuid().toString());
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("message", "Login Failed. The sign-in details are incorrect.");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-            }
-        } else {
+        if (userOpt.isEmpty()) {
             response.put("message", "User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
+
+        User user = userOpt.get();
+        String storedPassword = (String) user.getAddinfo().get("password");
+
+        if (!storedPassword.equals(password)) {
+            response.put("message", "Login failed");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        session.setAttribute("USER_ID", user.getID());
+
+        response.put("message", "Login: accepted: " + session.getAttribute("USER_ID"));
+        return ResponseEntity.ok(response);
     }
 
 }

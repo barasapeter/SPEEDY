@@ -45,10 +45,18 @@
 
         <main class="flex-1 p-6 space-y-6 overflow-auto">
 
-            <section class="bg-white p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-300">
+            <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800 mb-3">Welcome Back</h2>
-                <p class="text-gray-600 mb-6" th:text="${shop != null} ? ${shop} : 'Start by updating your shop details'"></p>
                 
+                <p class="text-gray-600 mb-6" 
+                th:if="${shop != null}">
+                    <span class="font-bold" th:text="${shop.name}">Shop Name</span> - 
+                    <span class="italic" th:text="${shop.location}">Location</span>
+                </p>
+                <p class="text-gray-600 mb-6" th:if="${shop == null}">
+                    Start by updating your shop details
+                </p>
+
                 <section class="text-center">
                     <button
                         id="getStarted"
@@ -59,7 +67,6 @@
                     </button>
                 </section>
             </section>
-
 
         </main>
 

@@ -5,19 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-function openShopDialog() {
+function openShopDialog(name, location) {
   Swal.fire({
     title: "Update Shop Details",
     html: `
       <div class="flex flex-col gap-4 text-left mt-2">
         <label for="shop-name" class="font-semibold text-gray-800">Shop Name</label>
         <input id="shop-name" 
+               value="${name}"
                type="text"
                class="swal2-input rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400" 
                placeholder="Enter shop name" />
 
         <label for="shop-location" class="font-semibold text-gray-800">Location</label>
-        <input id="shop-location" 
+        <input id="shop-location"
+               value="${location}" 
                type="text"
                class="swal2-input rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400" 
                placeholder="Enter location" />

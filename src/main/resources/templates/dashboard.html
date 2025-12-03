@@ -58,13 +58,14 @@
                 </p>
 
                 <section class="text-center">
-                    <button
-                        id="getStarted"
-                        onclick="openShopDialog()"
-                        class="bg-orange-500 text-white font-semibold py-3 px-8 w-full rounded-2xl shadow hover:bg-orange-600 transition-colors duration-300 text-lg"
-                    >
-                        Update Shop Details
-                    </button>
+                    <button 
+    id="getStarted" 
+    th:attr="data-shop-name=${shop?.name}, data-shop-location=${shop?.location}"
+    onclick="const btn = document.getElementById('getStarted'); openShopDialog(btn.dataset.shopName, btn.dataset.shopLocation);"
+    class="bg-orange-500 text-white font-semibold py-3 px-8 w-full rounded-2xl shadow hover:bg-orange-600 transition-colors duration-300 text-lg" 
+> 
+    Update Shop Details 
+</button>
                 </section>
             </section>
 

@@ -1,6 +1,5 @@
 package com.barasa.speedy.shop.web;
 
-import com.barasa.speedy.shop.domain.ShopService;
 import com.barasa.speedy.user.domain.User;
 import com.barasa.speedy.user.domain.UserService;
 

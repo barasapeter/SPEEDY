@@ -28,7 +28,7 @@ function openShopDialog(name = '', location = '') {
               id="shop-name" 
               value="${name || ''}"
               type="text"
-              class="w-full pl-12 pr-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all duration-200 placeholder-gray-400" 
+              class="w-full pl-12 pr-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100" 
               placeholder="e.g., Peter's Bike Shop" 
             />
           </div>
@@ -49,7 +49,7 @@ function openShopDialog(name = '', location = '') {
               id="shop-location"
               value="${location || ''}" 
               type="text"
-              class="w-full pl-12 pr-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all duration-200 placeholder-gray-400" 
+              class="w-full pl-12 pr-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 placeholder-gray-400" 
               placeholder="e.g., Egerton Main Gate" 
             />
           </div>
@@ -74,8 +74,8 @@ function openShopDialog(name = '', location = '') {
     cancelButtonText: '<span class="flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>Cancel</span>',
     buttonsStyling: false,
     customClass: {
-      confirmButton: "bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105",
-      cancelButton: "bg-white text-gray-700 font-semibold px-6 py-3 rounded-xl border-2 border-gray-300 shadow hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 mr-3",
+      confirmButton: "bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-orange-700",
+      cancelButton: "bg-white text-gray-700 font-semibold px-6 py-3 rounded-xl border-2 border-gray-300 shadow hover:bg-gray-50 hover:border-gray-400",
       popup: "rounded-3xl shadow-2xl p-8 max-w-2xl bg-gradient-to-br from-white to-gray-50",
       title: "text-2xl font-bold text-gray-800 mb-2",
       htmlContainer: "text-gray-700",
@@ -133,7 +133,7 @@ function openShopDialog(name = '', location = '') {
           confirmButtonText: "Got it!",
           buttonsStyling: false,
           customClass: {
-            confirmButton: "bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105",
+            confirmButton: "bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-green-600 hover:to-green-700",
             popup: "rounded-3xl shadow-2xl p-8",
             title: "mb-2",
             htmlContainer: "text-gray-700"
@@ -151,7 +151,7 @@ function openShopDialog(name = '', location = '') {
           confirmButtonText: "Try Again",
           buttonsStyling: false,
           customClass: {
-            confirmButton: "bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105",
+            confirmButton: "bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl hover:from-red-600 hover:to-red-700",
             popup: "rounded-3xl shadow-2xl p-8",
             title: "mb-2",
             htmlContainer: "text-gray-700"

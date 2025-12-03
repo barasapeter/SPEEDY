@@ -41,7 +41,7 @@ public class User {
         return this.phone;
     }
 
-    public Map<String, Object> getAddInfo() {
-        return this.addinfo;
+    public String getEmail() {
+        return (String) addinfo.get("email");
     }
 }

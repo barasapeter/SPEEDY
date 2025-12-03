@@ -45,7 +45,7 @@ public class DashBoardController {
         User user = userOpt.get();
 
         model.addAttribute("name", user.getName());
-        model.addAttribute("addinfo", user.getAddInfo());
+        model.addAttribute("email", user.getEmail());
 
         return "dashboard";
     }

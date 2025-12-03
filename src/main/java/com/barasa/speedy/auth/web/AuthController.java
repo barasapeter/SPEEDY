@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.barasa.speedy.common.util.PhoneNumberValidatorAndStandardizer;
 import com.barasa.speedy.user.domain.User;
 import com.barasa.speedy.user.domain.UserService;
-import com.barasa.speedy.auth.domain.JwtUtil;
+// import com.barasa.speedy.auth.domain.JwtUtil;
 
 @RestController
 @RequestMapping("/auth")
@@ -87,11 +87,11 @@ public class AuthController {
             User user = userOpt.get();
             String storedPassword = (String) user.getAddinfo().get("password");
             if (storedPassword.equals(password)) {
-                JwtUtil jwtUtil = new JwtUtil();
-                String token = jwtUtil.generateToken(email);
+                // JwtUtil jwtUtil = new JwtUtil();
+                // String token = jwtUtil.generateToken(email);
                 response.put("message", "Login: accepted");
-                response.put("token", token);
-                response.put("cookie", user.getUuid().toString());
+                // response.put("token", token);
+                // response.put("cookie", user.getUuid().toString());
                 return ResponseEntity.ok(response);
             } else {
                 response.put("message", "Login Failed. The sign-in details are incorrect.");

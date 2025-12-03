@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speedy - Dashboard</title>
+    <title>Speedy - Bikes</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -38,20 +38,26 @@
     <div class="bg-white w-full max-w-sm rounded-3xl shadow-xl overflow-hidden flex flex-col min-h-[80vh]">
 
         <!-- Header -->
-        <header class="bg-blue-600 text-white p-6 text-center rounded-b-3xl">
-            <h1 class="text-2xl font-bold mb-1"><span th:text="${name}">User Name</span></h1>
-            <p class="text-sm opacity-90"span>Rent Bike Vendor</span></p>
-            <p class="text-sm opacity-90"span th:text="${email}">user@example.com</span></p>
+        <header class="bg-purple-400 text-white p-6 text-center rounded-b-3xl">
+            <h1 class="text-2xl font-bold mb-1"><span>My Bikes</span></h1>
+            <p class="text-sm opacity-90"span>Manage your bikes here.</span></p>
+
+            <p class="text-sm-600 mb-6" 
+                th:if="${shop != null}">
+                <span class="font-bold" th:text="${shop.name}">Shop Name</span> - 
+                <span class="italic" th:text="${shop.location}">Location</span>
+            </p>
         </header>
 
         <main class="flex-1 p-6 space-y-6 overflow-auto">
-            <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-800 mb-3">Welcome Back</h2>
+            
+            <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200" th:if="${shop==null}">
+                <h2 class="text-xl font-semibold text-gray-800 mb-3">No Shop Found</h2>
                 
                 <p class="text-gray-600 mb-6" 
                 th:if="${shop != null}">
-                    <span class="font-bold" th:text="${shop.name}">Shop Name</span> - 
-                    <span class="italic" th:text="${shop.location}">Location</span>
+                    <span class="font-bold" th:text="${shop.name}">Shop Not Found</span> - 
+                    <span class="italic" th:text="${shop.location}">Please create a shop before adding Bikes.</span>
                 </p>
                 <p class="text-gray-600 mb-6" th:if="${shop == null}">
                     Start by updating your shop details
@@ -69,7 +75,7 @@
                 </section>
             </section>
 
-            <div th:if="${shop != null}" class="space-y-6">
+            <div th:if="${bikes != null}" class="space-y-6">
                 <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
                     <h2 class="text-xl font-semibold text-gray-800 mb-3">My Bikes</h2>
 
@@ -82,23 +88,18 @@
                     <section class="text-center">
                         <button 
                             id="manageBikes" 
-                            onclick="window.location.href='/bikes'"
-                            class="bg-blue-500 text-white font-semibold py-3 px-8 w-full rounded-2xl shadow hover:bg-blue-600 transition-colors duration-300 text-lg"
+                            class="bg-green-500 text-white font-semibold py-3 px-8 w-full rounded-2xl shadow hover:bg-green-600 transition-colors duration-300 text-lg"
                         >
-                            Manage Bikes
+                            Register New Bike
                         </button>
-
                     </section>
 
                 </section>
 
                 <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Ongoing Sessions</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Bike::</h2>
                 </section>
 
-                <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Past Sessions</h2>
-                </section>
             </div>
 
         </main>
@@ -110,6 +111,7 @@
 
     </div>
 
+    <script src="/bike-service.js"></script>
     <script src="/shop-service.js"></script>
 </body>
 </html>

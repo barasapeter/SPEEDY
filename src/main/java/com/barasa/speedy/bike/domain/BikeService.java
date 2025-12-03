@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -50,4 +51,13 @@ public class BikeService implements BikeRepository {
         return jpa.findById(code)
                 .map(Bike::fromEntity);
     }
+
+    @Override
+    public List<Bike> findByShopUuid(UUID uuid) {
+        return jpa.findByShopUuid(uuid)
+                .stream()
+                .map(Bike::fromEntity)
+                .toList();
+    }
+
 }

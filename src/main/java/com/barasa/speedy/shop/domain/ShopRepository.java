@@ -7,5 +7,7 @@ public interface ShopRepository {
 
     Optional<Shop> findById(UUID id);
 
+    Optional<Shop> findByOwner(String owner);
+
     List<Shop> findAll();
 }

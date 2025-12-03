@@ -33,6 +33,11 @@ public class ShopService implements ShopRepository {
     }
 
     @Override
+    public Optional<Shop> findByOwner(String owner) {
+        return jpa.findByOwner(owner).map(Shop::fromEntity);
+    }
+
+    @Override
     public List<Shop> findAll() {
         return jpa.findAll().stream().map(Shop::fromEntity).toList();
     }

@@ -9,5 +9,9 @@
     <h1>Hello, You have been successfully logged into Speedy!</h1>
     <h1>Welcome, <span th:text="${name}">User Name</span>!</h1>
     <p>Email: <span th:text="${email}">user@example.com</span></p>
+    <p th:text="${shop != null} ? ${shop} : 'Start By Creating an Online Shop'"></p>
+
+    <button th:if="${shop == null}" type="button">Get Started</button>
+
 </body>
 </html>

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.barasa.speedy.shop.domain.Shop;
+import com.barasa.speedy.shop.domain.ShopService;
 import com.barasa.speedy.user.domain.User;
 import com.barasa.speedy.user.domain.UserService;
 
@@ -16,9 +18,11 @@ import java.util.*;
 public class DashBoardController {
 
     private final UserService userService;
+    private final ShopService shopService;
 
-    public DashBoardController(UserService userService) {
+    public DashBoardController(UserService userService, ShopService shopService) {
         this.userService = userService;
+        this.shopService = shopService;
     }
 
     @GetMapping("/dashboard")
@@ -46,6 +50,7 @@ public class DashBoardController {
 
         model.addAttribute("name", user.getName());
         model.addAttribute("email", user.getEmail());
+        model.addAttribute("shop", shopService.findByOwner(userUuid.toString()).orElse(null));
 
         return "dashboard";
     }

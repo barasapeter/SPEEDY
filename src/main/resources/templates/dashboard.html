@@ -4,14 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speedy - Dashboard</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1D4ED8',
+                        secondary: '#2563EB',
+                        accent: '#FBBF24',
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .swal2-popup {
+            border-radius: 20px !important;
+            width: 400px;
+        }
+
+    </style>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body>
-    <h1>Hello, You have been successfully logged into Speedy!</h1>
-    <h1>Welcome, <span th:text="${name}">User Name</span>!</h1>
-    <p>Email: <span th:text="${email}">user@example.com</span></p>
-    <p th:text="${shop != null} ? ${shop} : 'Start By Creating an Online Shop'"></p>
+<body class="bg-gray-100 min-h-screen flex justify-center items-start p-4">
 
-    <button th:if="${shop == null}" type="button">Get Started</button>
+    <!-- Mobile App Container -->
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-xl overflow-hidden flex flex-col min-h-[80vh]">
 
+        <!-- Header -->
+        <header class="bg-primary text-white p-6 text-center rounded-b-3xl">
+            <h1 class="text-2xl font-bold mb-1">Welcome, <span th:text="${name}">User Name</span>!</h1>
+            <p class="text-sm opacity-90"span th:text="${email}">user@example.com</span></p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 space-y-6 overflow-auto">
+
+            <!-- User Info Card -->
+            <section class="bg-gray-50 p-4 rounded-2xl shadow-inner">
+                <h2 class="font-semibold text-gray-700 mb-2">Your Information</h2>
+                <p class="text-gray-600 mt-1" th:text="${shop != null} ? ${shop} : 'Start by creating an online shop'"></p>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="text-center">
+                <button
+                    id="getStarted"
+                    
+                    onclick="openShopDialog()"
+                    class="bg-accent text-white font-bold py-3 px-8 w-full rounded-2xl shadow-lg hover:bg-yellow-400 transition-all duration-300 text-lg"
+                >
+                    Get Started
+                </button>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center p-4 text-sm text-gray-400">
+            &copy; 2025 Speedy Inc.
+        </footer>
+
+    </div>
+
+    <script src="/shop-service.js"></script>
 </body>
 </html>

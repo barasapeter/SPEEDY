@@ -14,7 +14,6 @@ function openShopDialog(name = '', location = '') {
     title: '<div class="flex items-center gap-3"><svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg><span>Update Shop Details</span></div>',
     html: `
       <div class="space-y-6 text-left mt-6">
-        <!-- Shop Name Input -->
         <div class="relative">
           <label for="shop-name" class="block text-sm font-semibold text-gray-700 mb-2">
             Shop Name
@@ -30,12 +29,11 @@ function openShopDialog(name = '', location = '') {
               value="${name || ''}"
               type="text"
               class="w-full pl-12 pr-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all duration-200 placeholder-gray-400" 
-              placeholder="e.g., Joe's Coffee Shop" 
+              placeholder="e.g., Peter's Bike Shop" 
             />
           </div>
         </div>
 
-        <!-- Location Input -->
         <div class="relative">
           <label for="shop-location" class="block text-sm font-semibold text-gray-700 mb-2">
             Location
@@ -52,7 +50,7 @@ function openShopDialog(name = '', location = '') {
               value="${location || ''}" 
               type="text"
               class="w-full pl-12 pr-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all duration-200 placeholder-gray-400" 
-              placeholder="e.g., 123 Main Street, Downtown" 
+              placeholder="e.g., Egerton Main Gate" 
             />
           </div>
         </div>

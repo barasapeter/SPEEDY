@@ -24,7 +24,7 @@
     <style>
         .swal2-popup {
             border-radius: 20px !important;
-            width: 380px;
+            margin-left: 40px;
         }
 
     </style>
@@ -68,6 +68,20 @@
                     </button>
                 </section>
             </section>
+
+            <div th:if="${shop != null}" class="space-y-6">
+                <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">My Bikes</h2>
+                </section>
+
+                <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Ongoing Sessions</h2>
+                </section>
+
+                <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Past Sessions</h2>
+                </section>
+            </div>
 
         </main>
 

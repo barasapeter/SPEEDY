@@ -1,5 +1,7 @@
 package com.barasa.speedy.bike.web;
 
+import com.barasa.speedy.bike.domain.Bike;
+import com.barasa.speedy.bike.domain.BikeService;
 import com.barasa.speedy.shop.domain.Shop;
 import com.barasa.speedy.shop.domain.ShopService;
 import com.barasa.speedy.user.domain.User;
@@ -26,65 +28,70 @@ public class BikeController {
 
     private final UserService userService;
     private final ShopService shopService;
+    private final BikeService bikeService;
 
-    public BikeController(UserService userService, ShopService shopService) {
+    public BikeController(UserService userService, ShopService shopService, BikeService bikeService) {
         this.userService = userService;
         this.shopService = shopService;
+        this.bikeService = bikeService;
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Map<String, String>> updateShopDetails(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<Map<String, String>> updateOrCreateBike(
+            @RequestBody Map<String, Object> payload,
             HttpSession session) {
-        Map<String, String> updateShopRequestResult = new HashMap<>();
+
+        Map<String, String> result = new HashMap<>();
 
         String userUuidStr = (String) session.getAttribute("USER_ID");
+        if (userUuidStr == null) {
+            result.put("message", "You need to log in first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+        }
 
         UUID userUuid;
         try {
             userUuid = UUID.fromString(userUuidStr);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.ok(updateShopRequestResult);
+            result.put("message", "Invalid user session.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
         Optional<User> userOpt = userService.findById(userUuid);
-
         if (userOpt.isEmpty()) {
-            updateShopRequestResult.put("message", "You need to log in first.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(updateShopRequestResult);
+            result.put("message", "You need to log in first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
         Optional<Shop> shopOpt = shopService.findByOwner(userOpt.get().getID());
-
-        String shopName = (String) payload.get("location");
-        String shopLocation = (String) payload.get("name");
-
         if (shopOpt.isEmpty()) {
-            Shop shop = Shop.builder()
-                    .uuid(UUID.randomUUID())
-                    .name(shopName)
-                    .location(shopLocation)
-                    .owner(userOpt.get().getID())
-                    .build();
-
-            shopService.save(shop);
-            updateShopRequestResult.put("message", "New shop created with  details updated successfully.");
-        } else {
-            Shop shop = shopOpt.get();
-
-            if (shopName != null && !shopName.isEmpty()) {
-                shop.setName(shopName);
-            }
-
-            if (shopLocation != null && !shopLocation.isEmpty()) {
-                shop.setLocation(shopLocation);
-            }
-
-            shopService.save(shop);
-            updateShopRequestResult.put("message", "Shop details updated successfully.");
-
+            result.put("message", "Your shop could not be found.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
         }
 
-        return ResponseEntity.ok(updateShopRequestResult);
+        String bikeCode = (String) payload.get("bikeCode");
+        Double rpm = Double.valueOf((String) payload.get("rpm"));
+
+        Optional<Bike> bikeOpt = bikeService.findByCode(bikeCode);
+
+        Bike bike;
+        if (bikeOpt.isPresent()) {
+            bike = bikeOpt.get();
+            bike.setRpm(rpm);
+            bike.setShopUuid(shopOpt.get().getUuid());
+            result.put("message", "Bike updated successfully");
+        } else {
+            bike = Bike.builder()
+                    .code(bikeCode)
+                    .rpm(rpm)
+                    .shopUuid(shopOpt.get().getUuid())
+                    .build();
+            result.put("message", "Bike created successfully");
+        }
+
+        bikeService.save(bike);
+
+        return ResponseEntity.ok(result);
     }
 
 }

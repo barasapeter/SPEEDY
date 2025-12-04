@@ -103,8 +103,8 @@ document.getElementById("manageBikes").addEventListener("click", function () {
 
             // Show loading state
             Swal.fire({
-                title: '<div class="flex items-center justify-center gap-3"><div class="rounded-full h-8 w-8 border-b-2 border-orange-500"></div><span>Registering...</span></div>',
-                html: '<p class="text-gray-600 mt-2 text-center">Please wait while we register your bike</p>',
+                title: '<div class="flex items-center justify-center gap-3"><div class="rounded-full h-8 w-8 border-b-2 border-orange-500"></div><span>Processing...</span></div>',
+                html: '<p class="text-gray-600 mt-2 text-center">Please wait while we update your bike</p>',
                 showConfirmButton: false,
                 allowOutsideClick: false,
                 customClass: {
@@ -114,22 +114,21 @@ document.getElementById("manageBikes").addEventListener("click", function () {
             });
 
             try {
-                // TODO: Replace with actual API call
-                // const response = await fetch("/bike/register", {
-                //     method: "POST",
-                //     headers: { "Content-Type": "application/json" },
-                //     body: JSON.stringify({ bikeCode, rpm })
-                // });
-                // const data = await response.json();
-                
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                console.log("Bike Code:", bikeCode, "Rate per minute:", rpm);
+                const response = await fetch("/bike/update", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ bikeCode, rpm })
+                });
 
-                // Success message
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || "Unable to update bike.");
+                }
+
                 Swal.fire({
                     icon: "success",
-                    title: '<div class="text-xl sm:text-2xl font-bold text-gray-800 text-center">Bike Registered Successfully!</div>',
+                    title: `<div class="text-xl sm:text-2xl font-bold text-gray-800 text-center">${data.message}</div>`,
                     html: `
                         <div class="mt-4 space-y-3">
                             <div class="p-4 bg-orange-50 rounded-lg border border-orange-200">
@@ -142,7 +141,7 @@ document.getElementById("manageBikes").addEventListener("click", function () {
                                     <span class="text-lg font-bold text-green-600">KSH ${parseFloat(rpm).toFixed(2)}</span>
                                 </div>
                             </div>
-                            <p class="text-xs sm:text-sm text-gray-500 text-center">Keep the bike code safe for your records</p>
+                            <p class="text-xs sm:text-sm text-gray-500 text-center">Be careful with record duplication</p>
                         </div>
                     `,
                     background: "linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)",
@@ -156,13 +155,15 @@ document.getElementById("manageBikes").addEventListener("click", function () {
                         htmlContainer: "text-gray-700",
                         actions: "w-full mt-6"
                     }
+                }).then(() => {
+                    window.location.reload();
                 });
+
             } catch (error) {
-                // Error message
                 Swal.fire({
                     icon: "error",
-                    title: '<div class="text-xl sm:text-2xl font-bold text-gray-800 text-center">Registration Failed</div>',
-                    html: `<p class="text-gray-600 mt-2 text-center">${error.message || "Unable to register bike. Please try again."}</p>`,
+                    title: '<div class="text-xl sm:text-2xl font-bold text-gray-800 text-center">Operation Failed</div>',
+                    html: `<p class="text-gray-600 mt-2 text-center">${error.message || "Unable to update bike. Please try again."}</p>`,
                     background: "linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)",
                     iconColor: "#EF4444",
                     confirmButtonText: "Try Again",

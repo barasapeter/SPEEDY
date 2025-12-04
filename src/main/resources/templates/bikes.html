@@ -112,18 +112,17 @@
                     <div th:each="bike : ${bikes}" th:if="${bikes.size() > 0}" class="flex items-center space-x-4 mb-6">
 
                         <!-- Image -->
-                        <img th:src="${bike.pictureUrl}" 
+                        <img th:src="${bike.getPictureURL()}" 
                             alt="Bike Image" 
                             class="w-24 h-24 object-cover rounded-xl shadow">
 
                         <!-- Details -->
                         <div class="text-gray-700">
-                            <p><span class="font-semibold">Code:</span> [[${bike.code}]]</p>
-                            <p><span class="font-semibold">Rate Per Minute:</span> [[${bike.rpm}]]</p>
+                            <p><span class="font-semibold">[[${bike.getCode()}]]</span> </p>
+                            <p><span class="font-semibold">RPM:</span> [[${bike.getRpm()}]]</p>
                             <p>
-                                <span class="font-semibold">Status:</span>
-                                <span th:text="${bike.available} ? 'Available' : 'Unavailable'"
-                                    th:classappend="${bike.available} ? 'text-green-600' : 'text-red-600'">
+                                <span th:text="${bike.getAvailabilityStatus()} ? 'Available' : 'Unavailable'"
+                                    th:classappend="${bike.getAvailabilityStatus()} ? 'text-green-600' : 'text-red-600'">
                                 </span>
                             </p>
                         </div>

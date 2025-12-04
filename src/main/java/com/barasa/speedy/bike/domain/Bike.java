@@ -4,8 +4,6 @@ import com.barasa.speedy.bike.infrastructure.BikeEntity;
 import lombok.*;
 import java.util.*;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,5 +29,22 @@ public class Bike {
             throw new IllegalArgumentException("RPM must be positive.");
         }
         this.rpm = newRpm;
+    }
+
+    public String getCode() {
+        return this.code;
+    }
+
+    public Double getRpm() {
+        return this.rpm;
+    }
+
+    public String getPictureURL() {
+        // return (String) addinfo.get("pictureURL");
+        return "/me.jpg";
+    }
+
+    public String getAvailabilityStatus() {
+        return "Unavailable";
     }
 }

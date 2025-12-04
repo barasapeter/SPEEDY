@@ -13,4 +13,6 @@ public interface BikeRepository {
 
     List<Bike> findByShopUuid(UUID uuid);
 
+    void delete(Bike bike);
+
 }

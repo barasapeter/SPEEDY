@@ -60,4 +60,8 @@ public class BikeService implements BikeRepository {
                 .toList();
     }
 
+    @Override
+    public void delete(Bike bike) {
+        jpa.deleteById(bike.getCode());
+    }
 }

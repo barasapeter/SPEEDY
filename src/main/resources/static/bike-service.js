@@ -82,7 +82,6 @@ function openBikeDialog(bikeCode = null, rpm = null) {
             </div>
         `,
         focusConfirm: false,
-        showCancelButton: false,
         confirmButtonText: `<span class="flex items-center justify-center gap-2 text-sm sm:text-base"><svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>${isNew ? 'Register Bike' : 'Update Bike'}</span>`,
         cancelButtonText: '<span class="flex items-center justify-center gap-2 text-sm sm:text-base"><svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>Cancel</span>',
         buttonsStyling: false,
@@ -135,7 +134,6 @@ function openBikeDialog(bikeCode = null, rpm = null) {
                     throw new Error(data.message || "Operation failed");
                 }
 
-                // Success message
                 Swal.fire({
                     icon: 'success',
                     title: `<div class="text-xl sm:text-2xl font-bold text-gray-800 text-center">${isNew ? 'Bike Registered Successfully!' : 'Bike Updated Successfully!'}</div>`,
@@ -170,7 +168,6 @@ function openBikeDialog(bikeCode = null, rpm = null) {
                 });
 
             } catch (error) {
-                // Error message
                 Swal.fire({
                     icon: 'error',
                     title: '<div class="text-xl sm:text-2xl font-bold text-gray-800 text-center">Operation Failed</div>',
@@ -203,3 +200,71 @@ document.querySelectorAll('[data-code]').forEach(element => {
         openBikeDialog(code, rpm);
     });
 });
+
+function confirmDelete(button) {
+    const bikeDiv = button.closest('.bike-item');
+    const bikeCode = bikeDiv.querySelector('p').innerText;
+
+    Swal.fire({
+        title: `Delete bike ${bikeCode}?`,
+        text: "This action cannot be undone.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+        // Add these properties for better mobile centering
+        customClass: {
+            container: 'swal-mobile-fix'
+        },
+        backdrop: true,
+        allowOutsideClick: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/bike/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ bikeCode: bikeCode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Bike deleted successfully") {
+                    bikeDiv.remove();
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: `Bike ${bikeCode} has been deleted.`,
+                        icon: 'success',
+                        customClass: {
+                            container: 'swal-mobile-fix'
+                        }
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.message || 'Could not delete the bike.',
+                        icon: 'error',
+                        customClass: {
+                            container: 'swal-mobile-fix'
+                        }
+                    });
+                }
+            })
+            .catch(err => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Something went wrong while deleting the bike.',
+                    icon: 'error',
+                    customClass: {
+                        container: 'swal-mobile-fix'
+                    }
+                });
+                console.error(err);
+            });
+        }
+    });
+}

@@ -24,12 +24,30 @@
     <style>
         .swal2-popup {
             border-radius: 20px !important;
-            margin-left: 40px;
         }
 
+        .swal-mobile-fix {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .swal2-container {
+            padding: 10px !important;
+        }
+
+        .swal2-popup {
+            margin: auto !important;
+        }
+
+        @media (max-width: 768px) {
+            .swal2-popup {
+                width: 90% !important;
+                max-width: 400px !important;
+            }
+        }
     </style>
 
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex justify-center items-start p-4">
@@ -141,30 +159,7 @@
                     </div>
 
                     <script>
-                    function confirmDelete(button) {
-                        const bikeDiv = button.closest('.bike-item');
-                        const bikeCode = bikeDiv.querySelector('p').innerText;
-
-                        Swal.fire({
-                            title: `Delete bike ${bikeCode}?`,
-                            text: "This action cannot be undone.",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#d33',
-                            cancelButtonColor: '#3085d6',
-                            confirmButtonText: 'Yes, delete it!',
-                            cancelButtonText: 'Cancel'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                bikeDiv.remove();
-                                Swal.fire(
-                                    'Deleted!',
-                                    `Bike ${bikeCode} has been deleted.`,
-                                    'success'
-                                );
-                            }
-                        });
-                    }
+                        
                     </script>
                 </section>
             </div>

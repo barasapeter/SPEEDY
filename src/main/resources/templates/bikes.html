@@ -80,10 +80,14 @@
                     <h2 class="text-xl font-semibold text-gray-800 mb-3">My Bikes</h2>
 
                     <p class="text-gray-600 mb-6">
-                        <span class="italic">You have </span> -
-                        <span class="font-bold"> 8 bikes</span>
+                        <span class="italic">You have </span> - 
+                        <span class="font-bold">[[${bikes.size()}]] bikes</span>
                     </p>
-                    <p class="text-gray-600 mb-6"> Manage Available bikes</p>
+
+                    <p class="text-gray-600 mb-6">
+                        [[${bikes.size() == 0} ? 'Register Your First Bike' : 'Manage Available Bikes']]
+                    </p>
+
                     
                     <section class="text-center">
                         <button 
@@ -97,8 +101,36 @@
                 </section>
 
                 <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Bike::</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Registered Bikes</h2>
+
+                    <!-- Empty State -->
+                    <div th:if="${bikes.size() == 0}" class="text-gray-600 italic text-center py-4">
+                        Please Register bike to Get Started.
+                    </div>
+
+                    <!-- Bike List -->
+                    <div th:each="bike : ${bikes}" th:if="${bikes.size() > 0}" class="flex items-center space-x-4 mb-6">
+
+                        <!-- Image -->
+                        <img th:src="${bike.pictureUrl}" 
+                            alt="Bike Image" 
+                            class="w-24 h-24 object-cover rounded-xl shadow">
+
+                        <!-- Details -->
+                        <div class="text-gray-700">
+                            <p><span class="font-semibold">Code:</span> [[${bike.code}]]</p>
+                            <p><span class="font-semibold">Rate Per Minute:</span> [[${bike.rpm}]]</p>
+                            <p>
+                                <span class="font-semibold">Status:</span>
+                                <span th:text="${bike.available} ? 'Available' : 'Unavailable'"
+                                    th:classappend="${bike.available} ? 'text-green-600' : 'text-red-600'">
+                                </span>
+                            </p>
+                        </div>
+
+                    </div>
                 </section>
+
 
             </div>
 

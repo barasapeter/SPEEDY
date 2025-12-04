@@ -5,7 +5,6 @@ import lombok.*;
 import java.util.*;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -44,5 +43,29 @@ public class Session {
                 .txnCode(txnCode)
                 .addinfo(addinfo)
                 .build();
+    }
+
+    public String getBikeCode() {
+        return this.bikeCode;
+    }
+
+    public String getUserFullNames() {
+        return "Fardosa Mpenda Baskeli";
+    }
+
+    public Instant getStartTime() {
+        return this.startTime;
+    }
+
+    public Instant getStopTime() {
+        return this.stopTime;
+    }
+
+    public String getPictureURL() {
+        return "/me.png";
+    }
+
+    public UUID getUuid() {
+        return this.uuid;
     }
 }

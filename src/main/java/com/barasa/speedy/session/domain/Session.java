@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Session {
 
     private UUID uuid;
+    private UUID shopUuid;
     private String bikeCode;
     private UUID userUuid;
     private Instant startTime;
@@ -24,6 +25,7 @@ public class Session {
             return null;
         return Session.builder()
                 .uuid(e.getUuid())
+                .shopUuid(e.getShop() != null ? e.getShop().getUuid() : null)
                 .bikeCode(e.getBike() != null ? e.getBike().getCode() : null)
                 .userUuid(e.getUser() != null ? e.getUser().getUuid() : null)
                 .startTime(e.getStartTime())

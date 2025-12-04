@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speedy - Sessions</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1D4ED8',
+                        secondary: '#2563EB',
+                        accent: '#FBBF24',
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .swal2-popup {
+            border-radius: 20px !important;
+        }
+
+        .swal-mobile-fix {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .swal2-container {
+            padding: 10px !important;
+        }
+
+        .swal2-popup {
+            margin: auto !important;
+        }
+
+        @media (max-width: 768px) {
+            .swal2-popup {
+                width: 90% !important;
+                max-width: 400px !important;
+            }
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex justify-center items-start p-4">
+
+    <!-- Mobile App Container -->
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-xl overflow-hidden flex flex-col min-h-[80vh]">
+
+        <!-- Header -->
+        <header class="text-yellow-400 text-white p-6 text-center rounded-b-3xl">
+            <h1 class="text-2xl font-bold mb-1"><span>Sessions</span></h1>
+            <p class="text-sm opacity-90"span>Create and Manage Ongoing Sessions</span></p>
+
+            <p class="text-sm-600 mb-6" 
+                th:if="${shop != null}">
+                <span class="font-bold" th:text="${shop.name}">Shop Name</span>
+            </p>
+        </header>
+
+        <main class="flex-1 p-6 space-y-6 overflow-auto">
+            <section class="space-y-6">
+
+                <p th:text="${sessions}"></p>
+                
+            </section>
+        </main>
+        <footer class="text-center p-4 text-sm text-gray-400">
+            &copy; 2025 Speedy Inc.
+        </footer>
+    </div>
+    <script src="/session-service.js"></script>
+</body>
+</html>

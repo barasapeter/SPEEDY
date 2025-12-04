@@ -12,4 +12,6 @@ public interface SessionRepository {
     List<Session> findAll();
 
     SessionReport saveReport(SessionReport report);
+
+    List<Session> findByShopUuid(UUID shopUuid);
 }

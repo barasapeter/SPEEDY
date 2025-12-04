@@ -2,6 +2,8 @@ package com.barasa.speedy.session.infrastructure;
 
 import com.barasa.speedy.user.infrastructure.UserEntity;
 import com.barasa.speedy.bike.infrastructure.BikeEntity;
+import com.barasa.speedy.shop.infrastructure.ShopEntity;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +26,10 @@ public class SessionEntity {
     @Id
     @Column(columnDefinition = "UUID")
     private UUID uuid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shop_uuid", nullable = false)
+    private ShopEntity shop;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bike_code", nullable = false)

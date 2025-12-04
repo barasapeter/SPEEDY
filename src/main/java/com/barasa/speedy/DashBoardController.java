@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.barasa.speedy.bike.domain.Bike;
 import com.barasa.speedy.bike.domain.BikeService;
+import com.barasa.speedy.session.domain.Session;
+import com.barasa.speedy.session.domain.SessionService;
 import com.barasa.speedy.shop.domain.Shop;
 import com.barasa.speedy.shop.domain.ShopService;
 import com.barasa.speedy.user.domain.User;
@@ -22,11 +24,17 @@ public class DashBoardController {
     private final UserService userService;
     private final ShopService shopService;
     private final BikeService bikeService;
+    private final SessionService sessionService;
 
-    public DashBoardController(UserService userService, ShopService shopService, BikeService bikeService) {
+    public DashBoardController(
+            UserService userService,
+            ShopService shopService,
+            BikeService bikeService,
+            SessionService sessionService) {
         this.userService = userService;
         this.shopService = shopService;
         this.bikeService = bikeService;
+        this.sessionService = sessionService;
     }
 
     @GetMapping("/dashboard")
@@ -90,6 +98,39 @@ public class DashBoardController {
         }
 
         return "bikes";
+    }
+
+    @GetMapping("/sessions")
+    public String sessions(HttpServletRequest request, Model model, HttpSession session) {
+        String userUuidStr = (String) session.getAttribute("USER_ID");
+
+        if (userUuidStr == null) {
+            return "redirect:/";
+        }
+
+        UUID userUuid;
+        try {
+            userUuid = UUID.fromString(userUuidStr);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/";
+        }
+
+        Optional<User> userOpt = userService.findById(userUuid);
+
+        if (userOpt.isEmpty()) {
+            return "redirect:/";
+        }
+
+        Optional<Shop> shopOpt = shopService.findByOwner(userOpt.get().getID());
+        if (shopOpt.isEmpty()) {
+            model.addAttribute("shop", null);
+        } else {
+            List<Session> sessions = sessionService.findByShopUuid(shopOpt.get().getUuid());
+            model.addAttribute("shop", shopService.findByOwner(userUuid.toString()).orElse(null));
+            model.addAttribute("sessions", sessions);
+        }
+
+        return "sessions";
     }
 
 }

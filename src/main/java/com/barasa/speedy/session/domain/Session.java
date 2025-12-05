@@ -1,6 +1,8 @@
 package com.barasa.speedy.session.domain;
 
 import com.barasa.speedy.session.infrastructure.SessionEntity;
+import com.barasa.speedy.shop.domain.Shop;
+
 import lombok.*;
 import java.util.*;
 
@@ -32,8 +34,13 @@ public class Session {
                 .build();
     }
 
-    public SessionReport toReport(Integer dim, String crid, String txndesc,
-            java.math.BigDecimal amountCharged, String txnCode, Map<String, Object> addinfo) {
+    public SessionReport toReport(
+            Integer dim,
+            String crid,
+            String txndesc,
+            java.math.BigDecimal amountCharged,
+            String txnCode,
+            Map<String, Object> addinfo) {
         return SessionReport.builder()
                 .sessionUuid(this.uuid)
                 .dim(dim)

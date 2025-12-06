@@ -76,4 +76,3 @@ public class Session {
         return this.uuid;
     }
 }
-

@@ -176,7 +176,11 @@ public class SessionController {
             result.put("message", "Invalid Session ID passed.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         } else {
-            result.put("message", "Stopping session...");
+            Session updatedSession = existingSession.get();
+            updatedSession.setStopTime(Instant.now());
+            sessionService.save(updatedSession);
+            result.put("message",
+                    "Session Stopped successfully. Total cost: " + updatedSession.getChargeNowFormatted());
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
 

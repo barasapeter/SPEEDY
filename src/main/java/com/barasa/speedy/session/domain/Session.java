@@ -69,7 +69,7 @@ public class Session {
     }
 
     public String getPictureURL() {
-        return "/me.png";
+        return "/me.jpg";
     }
 
     public UUID getUuid() {

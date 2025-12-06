@@ -83,6 +83,8 @@ document.getElementById('startSession').addEventListener('click', async () => {
                 title: 'Session Created',
                 text: data.message || 'Session started.',
                 confirmButtonColor: '#22c55e'
+            }).then(() => {
+                window.location.reload(true);
             })
         } else {
             Swal.fire({
@@ -162,7 +164,7 @@ async function stopSession(button) {
                                 class="w-full gradient-bg text-white px-4 py-2.5 rounded-lg font-semibold shadow-md flex items-center justify-center gap-2">
                             Bill Now
                         </button>
-                        <button onclick="terminateSession(this)" 
+                        <button onclick="terminateSession(this)" style="display: none;" 
                                 class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2.5 rounded-lg font-medium shadow-md flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>

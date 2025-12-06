@@ -40,6 +40,10 @@ public class SessionService implements SessionRepository {
             userRef = em.getReference(UserEntity.class, session.getUserUuid());
         }
 
+        if (session.getUserUuid() != null) {
+            userRef = em.getReference(UserEntity.class, session.getUserUuid());
+        }
+
         SessionEntity entity = SessionEntity.builder()
                 .uuid(session.getUuid())
                 .shop(shopRef)

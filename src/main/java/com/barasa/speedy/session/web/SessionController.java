@@ -73,6 +73,12 @@ public class SessionController {
         }
 
         UUID sessionUuid = UUID.fromString((String) payload.get("sessionUuid"));
+        Optional<Session> existingSession = sessionService.findById(sessionUuid);
+        if (existingSession.isPresent()) {
+            result.put("message", "A session already exists. Start time: " + existingSession.get().getStartTime());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
+        }
+
         String bikeCode = (String) payload.get("bikeCode");
         String collateral = (String) payload.get("collateral");
         String customerName = (String) payload.get("customerName");
@@ -84,11 +90,11 @@ public class SessionController {
         addinfo.put("toReportCollateral", collateral);
         addinfo.put("userType", "customer");
 
-        phone = PhoneNumberValidatorAndStandardizer.standardizePhone(phone);
-        if (phone == null) {
+        final String customerPhone = PhoneNumberValidatorAndStandardizer.standardizePhone(phone);
+        if (customerPhone == null) {
             result.put("title", "Invalid Number");
             result.put("message",
-                    "Failed to create account. Phone number " + phone + " is invalid. Please try again.");
+                    "Failed to create account. Phone number " + customerPhone + " is invalid. Please try again.");
             return ResponseEntity.badRequest().body(result);
         }
 
@@ -102,22 +108,20 @@ public class SessionController {
         // todo: check bike availability - in terms of session
 
         // check if user exists
-        Optional<User> customerOpt = userService.findByPhone(phone);
-        UUID userCustomerUuid = customerOpt.map(User::getUuid)
-                .orElseGet(() -> UUID.randomUUID());
-
-        if (customerOpt.isEmpty()) {
-            User customer = User.builder()
-                    .uuid(userCustomerUuid)
-                    .name(customerName)
-                    .phone(phone)
-                    .addinfo(addinfo)
-                    .build();
-            userService.save(customer);
-            result.put("status", "New customer added successfully");
-        } else {
-            result.put("status", "Customer status found");
-        }
+        Optional<User> customerOpt = userService.findByPhone(customerPhone);
+        UUID userCustomerUuid = customerOpt
+                .map(User::getUuid) // if exists → their UUID
+                .orElseGet(() -> {
+                    UUID id = UUID.randomUUID();
+                    User customer = User.builder()
+                            .uuid(id)
+                            .name(customerName)
+                            .phone(customerPhone)
+                            .addinfo(addinfo)
+                            .build();
+                    userService.save(customer);
+                    return id;
+                });
 
         System.out.println("Shop UUID:: " + shopOpt.get().getUuid());
 

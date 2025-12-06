@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.barasa.speedy.bike.domain.Bike;
 import com.barasa.speedy.bike.domain.BikeService;
@@ -131,6 +132,37 @@ public class DashBoardController {
         }
 
         return "sessions";
+    }
+
+    @GetMapping("/billing")
+    public String billing(
+            @RequestParam("uuid") UUID billingUuid,
+            HttpServletRequest request,
+            Model model,
+            HttpSession session) {
+        String userUuidStr = (String) session.getAttribute("USER_ID");
+
+        if (userUuidStr == null) {
+            return "redirect:/";
+        }
+
+        UUID userUuid;
+        try {
+            userUuid = UUID.fromString(userUuidStr);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/";
+        }
+
+        Optional<User> userOpt = userService.findById(userUuid);
+
+        if (userOpt.isEmpty()) {
+            return "redirect:/";
+        }
+
+        Optional<Session> sessionOpt = sessionService.findById(billingUuid);
+        System.out.println(sessionOpt.get());
+
+        return "billing";
     }
 
 }

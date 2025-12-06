@@ -16,7 +16,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -181,6 +183,65 @@ public class SessionController {
             sessionService.save(updatedSession);
             result.put("message",
                     "Session Stopped successfully. Total cost: " + updatedSession.getChargeNowFormatted());
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+
+    }
+
+    @PostMapping("/billing")
+    public ResponseEntity<Map<String, String>> billing(@RequestBody Map<String, Object> payload,
+            HttpSession session) {
+        Map<String, String> result = new HashMap<>();
+
+        String userUuidStr = (String) session.getAttribute("USER_ID");
+
+        UUID userUuid;
+        try {
+            userUuid = UUID.fromString(userUuidStr);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.ok(result);
+        }
+
+        Optional<User> userOpt = userService.findById(userUuid);
+
+        if (userOpt.isEmpty()) {
+            result.put("message", "You need to log in first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+        }
+
+        Optional<Shop> shopOpt = shopService.findByOwner(userOpt.get().getID());
+
+        if (shopOpt.isEmpty()) {
+            result.put("message", "Shop not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+
+        UUID sessionUuid = UUID.fromString((String) payload.get("sessionUuid"));
+        Optional<Session> existingSession = sessionService.findById(sessionUuid);
+        if (!existingSession.isPresent()) {
+            result.put("message", "Invalid Session ID passed.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        } else {
+            Session updatedSession = existingSession.get();
+            updatedSession.setStopTime(Instant.now());
+            sessionService.save(updatedSession);
+
+            Map<String, Object> addinfoStarter = new HashMap<>();
+            Map<String, Object> logEntity = new HashMap<>();
+            logEntity.put("activityArray", new ArrayList<>().add("Session Stopped"));
+            addinfoStarter.put("logEntity", logEntity);
+
+            // create checkout request ID (crid)
+            result.put("message",
+                    "Billing Initiated successfully. Total cost: " + updatedSession.getChargeNowFormatted());
+            SessionReport sessionReport = updatedSession.toReport(
+                    ((int) Math.round(updatedSession.getDurationInMinutes())),
+                    null,
+                    null,
+                    BigDecimal.valueOf(updatedSession.getChargeNow()),
+                    null,
+                    addinfoStarter);
+            sessionService.saveReport(sessionReport);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
 

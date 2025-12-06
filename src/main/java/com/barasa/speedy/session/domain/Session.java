@@ -1,7 +1,6 @@
 package com.barasa.speedy.session.domain;
 
 import com.barasa.speedy.session.infrastructure.SessionEntity;
-import com.barasa.speedy.shop.domain.Shop;
 
 import lombok.*;
 import java.util.*;
@@ -48,6 +47,7 @@ public class Session {
             java.math.BigDecimal amountCharged,
             String txnCode,
             Map<String, Object> addinfo) {
+
         return SessionReport.builder()
                 .sessionUuid(this.uuid)
                 .dim(dim)
@@ -71,6 +71,21 @@ public class Session {
         long charge = getChargeNow();
         NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("en-KE"));
         return "Kshs. " + nf.format(charge);
+    }
+
+    public Double getDurationInMinutes() {
+        if (startTime == null || rpm == null) {
+            return 0D;
+        }
+
+        Instant end = (stopTime != null) ? stopTime : Instant.now();
+        long seconds = java.time.Duration.between(startTime, end).getSeconds();
+        if (seconds < 0)
+            seconds = 0;
+
+        double minutesFraction = seconds / 60.0;
+        return minutesFraction;
+
     }
 
     public long getChargeNow() {

@@ -2,6 +2,7 @@ package com.barasa.speedy.session.domain;
 
 import com.barasa.speedy.bike.infrastructure.BikeEntity;
 import com.barasa.speedy.session.infrastructure.*;
+import com.barasa.speedy.shop.infrastructure.ShopEntity;
 import com.barasa.speedy.user.infrastructure.UserEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -30,12 +31,18 @@ public class SessionService implements SessionRepository {
             bikeRef = em.getReference(BikeEntity.class, session.getBikeCode());
         }
 
+        ShopEntity shopRef = null;
+        if (session.getShopUuid() != null) {
+            shopRef = em.getReference(ShopEntity.class, session.getShopUuid());
+        }
+
         if (session.getUserUuid() != null) {
             userRef = em.getReference(UserEntity.class, session.getUserUuid());
         }
 
         SessionEntity entity = SessionEntity.builder()
                 .uuid(session.getUuid())
+                .shop(shopRef)
                 .startTime(session.getStartTime())
                 .stopTime(session.getStopTime())
                 .bike(bikeRef)

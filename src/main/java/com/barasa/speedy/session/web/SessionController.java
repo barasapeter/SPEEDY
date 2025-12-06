@@ -103,7 +103,9 @@ public class SessionController {
 
         // check if user exists
         Optional<User> customerOpt = userService.findByPhone(phone);
-        UUID userCustomerUuid = UUID.randomUUID();
+        UUID userCustomerUuid = customerOpt.map(User::getUuid)
+                .orElseGet(() -> UUID.randomUUID());
+
         if (customerOpt.isEmpty()) {
             User customer = User.builder()
                     .uuid(userCustomerUuid)

@@ -45,7 +45,7 @@ public class SessionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> updateShopDetails(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<Map<String, String>> createSession(@RequestBody Map<String, Object> payload,
             HttpSession session) {
         Map<String, String> result = new HashMap<>();
 
@@ -139,6 +139,46 @@ public class SessionController {
         result.put("message", "Session created successfully. Start time: " + startTime);
 
         return ResponseEntity.ok(result);
+
+    }
+
+    @PostMapping("/stop")
+    public ResponseEntity<Map<String, String>> stopOngoingSession(@RequestBody Map<String, Object> payload,
+            HttpSession session) {
+        Map<String, String> result = new HashMap<>();
+
+        String userUuidStr = (String) session.getAttribute("USER_ID");
+
+        UUID userUuid;
+        try {
+            userUuid = UUID.fromString(userUuidStr);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.ok(result);
+        }
+
+        Optional<User> userOpt = userService.findById(userUuid);
+
+        if (userOpt.isEmpty()) {
+            result.put("message", "You need to log in first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+        }
+
+        Optional<Shop> shopOpt = shopService.findByOwner(userOpt.get().getID());
+
+        if (shopOpt.isEmpty()) {
+            result.put("message", "Shop not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+
+        UUID sessionUuid = UUID.fromString((String) payload.get("sessionUuid"));
+        Optional<Session> existingSession = sessionService.findById(sessionUuid);
+        if (!existingSession.isPresent()) {
+            result.put("message", "Invalid Session ID passed.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        } else {
+            result.put("message", "Stopping session...");
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
 
     }
 

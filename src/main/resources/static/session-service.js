@@ -101,3 +101,145 @@ document.getElementById('startSession').addEventListener('click', async () => {
         })
     }
 })
+
+function stopSession(button) {
+    const sessionDiv = button.closest('.bike-item');
+    const uuid = sessionDiv.getAttribute('data-uuid');
+    const statusContainer = sessionDiv.querySelector('.session-status');
+    const statusBadge = statusContainer.querySelector('.status-badge');
+    const actionButtons = sessionDiv.querySelector('.action-buttons');
+
+    Swal.fire({
+        title: 'Stop Session?',
+        text: "The timer will be paused and you can resume later",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#EF4444',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: 'Yes, Stop It',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            statusBadge.className = 'status-badge bg-red-100 px-3 py-1 rounded-full';
+            statusBadge.innerHTML = `
+                <span class="flex items-center gap-1.5 text-xs font-semibold text-red-700">
+                    <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                    <span>STOPPED</span>
+                </span>
+            `;
+
+            actionButtons.innerHTML = `
+                <button onclick="resumeSession(this)" 
+                        class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2.5 rounded-lg font-semibold shadow-md flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.868v4.264a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                    </svg>
+                    Resume
+                </button>
+                <button onclick="billSession('${uuid}')" 
+                        class="w-full gradient-bg text-white px-4 py-2.5 rounded-lg font-semibold shadow-md flex items-center justify-center gap-2">
+                    Bill Now
+                </button>
+                <button onclick="terminateSession(this)" 
+                        class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2.5 rounded-lg font-medium shadow-md flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Delete
+                </button>
+            `;
+
+            Swal.fire({
+                title: 'Session Stopped',
+                text: 'You can now bill or resume this session',
+                icon: 'success',
+                timer: 2000,
+            });
+        }
+    });
+}
+
+function resumeSession(button) {
+    const sessionDiv = button.closest('.bike-item');
+    const statusContainer = sessionDiv.querySelector('.session-status');
+    const statusBadge = statusContainer.querySelector('.status-badge');
+    const actionButtons = sessionDiv.querySelector('.action-buttons');
+
+    statusBadge.className = 'status-badge bg-green-100 px-3 py-1 rounded-full';
+    statusBadge.innerHTML = `
+        <span class="flex items-center gap-1.5 text-xs font-semibold text-green-700">
+            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+            <span>ONGOING</span>
+        </span>
+    `;
+
+    actionButtons.innerHTML = `
+        <button onclick="stopSession(this)" 
+                class="stop-btn w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-lg font-semibold shadow-md flex items-center justify-center gap-2"
+                title="Click to stop this session">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <rect x="6" y="6" width="12" height="12" rx="1"/>
+            </svg>
+            Stop Session
+        </button>
+    `;
+
+    Swal.fire({
+        title: 'Session Resumed',
+        text: 'Timer is now running again',
+        icon: 'success',
+        timer: 2000,
+    });
+}
+
+function billSession(uuid) {
+    Swal.fire({
+        title: 'Proceed to Billing?',
+        text: "You'll be redirected to the billing page",
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#667eea',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: 'Yes, Bill Now',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const billingUrl = `/billing?uuid=${encodeURIComponent(uuid)}`;
+            window.location.href = billingUrl;
+        }
+    });
+}
+
+function terminateSession(button) {
+    const sessionDiv = button.closest('.bike-item');
+
+    Swal.fire({
+        title: 'Delete Session?',
+        text: "This action cannot be undone!",
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#EF4444',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: 'Yes, Delete It',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            sessionDiv.remove();
+            Swal.fire({
+                title: 'Deleted!',
+                text: 'Session has been permanently removed',
+                icon: 'success',
+                timer: 2000,
+            });
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const emptyButton = document.getElementById('startSessionEmpty');
+    if (emptyButton) {
+        emptyButton.addEventListener('click', function() {
+            document.getElementById('startSession')?.click();
+        });
+    }
+});

@@ -6,5 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SessionJpaRepository extends JpaRepository<SessionEntity, UUID> {
-    List<SessionEntity> findByShopUuid(UUID id);
+    // List<SessionEntity> findByShopUuid(UUID id);
+
+    List<SessionEntity> findByShopUuidAndStopTimeIsNull(UUID shopUuid);
 }

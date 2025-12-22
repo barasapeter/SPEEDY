@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speedy - Dashboard</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1D4ED8',
+                        secondary: '#2563EB',
+                        accent: '#FBBF24',
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .swal2-popup {
+            border-radius: 20px !important;
+            margin-left: 40px;
+        }
+
+    </style>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex justify-center items-start p-4">
+
+    <!-- Mobile App Container -->
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-xl overflow-hidden flex flex-col min-h-[80vh]">
+
+        <!-- Header -->
+        <header class="bg-blue-500 text-white p-6 text-center rounded-b-3xl">
+            <h1 class="text-2xl font-bold mb-1"><span th:text="${name}">User Name</span></h1>
+            <p class="text-sm opacity-90"span>Rent Bike Vendor</span></p>
+            <p class="text-sm opacity-90"span th:text="${email}">user@example.com</span></p>
+        </header>
+
+        <main class="flex-1 p-6 space-y-6 overflow-auto">
+            <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 mb-3">Welcome Back</h2>
+                
+                <p class="text-gray-600 mb-6" 
+                th:if="${shop != null}">
+                    <span class="font-bold" th:text="${shop.name}">Shop Name</span> - 
+                    <span class="italic" th:text="${shop.location}">Location</span>
+                </p>
+                <p class="text-gray-600 mb-6" th:if="${shop == null}">
+                    Start by updating your shop details
+                </p>
+
+                <section class="text-center">
+                    <button 
+                        id="getStarted" 
+                        th:attr="data-shop-name=${shop?.name}, data-shop-location=${shop?.location}"
+                        onclick="const btn = document.getElementById('getStarted'); openShopDialog(btn.dataset.shopName, btn.dataset.shopLocation);"
+                        class="bg-orange-500 text-white font-semibold py-3 px-8 w-full rounded-2xl shadow hover:bg-orange-600 transition-colors duration-300 text-lg" 
+                    > 
+                        Update Shop Details 
+                    </button>
+                </section>
+            </section>
+
+            <section th:if="${shop != null}" class="space-y-6">
+                
+                
+                <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">My Bikes</h2>
+                    <p class="text-gray-600 mb-6"> Manage Available bikes</p>
+                    
+                    <section class="text-center">
+                        <button 
+                            id="manageBikes" 
+                            onclick="window.location.href='/bikes'"
+                            class="bg-blue-500 text-white font-semibold py-3 px-8 w-full rounded-2xl shadow hover:bg-blue-600 transition-colors duration-300 text-lg"
+                        >
+                            Manage Bikes
+                        </button>
+
+                    </section>
+
+                </section>
+
+                <section class="bg-gray-100 p-6 rounded-2xl shadow-md max-w-md mx-auto border border-gray-200">                    
+                    <section class="text-center">
+                        <button 
+                            id="startSession"
+                            onclick="window.location.href='/sessions'"
+                            class="bg-blue-500 text-white font-bold w-40 h-40 rounded-full shadow-xl hover:bg-blue-600 hover:shadow-2xl active:scale-95 active:shadow-lg transition-all duration-200 text-xl"
+                        >
+                        Sessions
+                        </button>
+                    </section>
+                </section>
+
+                
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center p-4 text-sm text-gray-400">
+            &copy; 2025 Speedy Inc.
+        </footer>
+
+    </div>
+
+    <script src="/shop-service.js"></script>
+</body>
+</html>

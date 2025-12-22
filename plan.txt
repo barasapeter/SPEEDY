@@ -1,0 +1,49 @@
+problem statement:
+for local bike hire business, the process is too manual. the shops have
+old books where they record their customers. when someone wants to rent a bike,
+they must have their details written manually. start time is recorded, and the user 
+is given a bike of choice. the user leaves basic details such as name and phone which are 
+recorded manually. also the rentee must leave a collateral (mostly phone) which will be recovered when he/she
+returns bike.
+
+after retuning bike, thereturn time is recorded and duration manually calculated.
+the time is converted into amount to charge. then the user is given back his/her phone
+to pay. payment is manual.
+
+i am developing Speedy, a simple tool to make this process lesser painful for the business.
+eliminate the manual recording. and eliminate manual payment. just stk push. create for me a 
+simple, professional website for this application. use tailwind cdn for styling.
+
+
+- ammendments:
+* remove emojis, use professional icons. use font awesome CDN
+* incluse that the system can work offline using USSD. the onboarding is very simple.
+* emphasize that the application is easy to use. very easy
+* the app supports bikes with different rates of charge
+* replace the "Request demo" section with Log In. add "Forgot password", create account, etc
+* add a cover on top. cover image that is responsive. it displays the parent company
+
+
+
+- i want to rent a bike
+- should provide the following details {
+	- name
+	- regno
+	- phone number
+	- picture (optional)
+	- collateral {
+		- collateralName
+		- approximate price
+	}
+	- anything else? { represent it as an object }
+}
+- allocate a bike
+- write start time
+- start counting
+- return bike
+- stop timer
+- calculate amount based on time
+- send STK push request to user phone
+- complete payment
+- check out
+- record for analytics

@@ -134,37 +134,6 @@ public class DashBoardController {
         return "sessions";
     }
 
-    @GetMapping("/billing")
-    public String billing(
-            @RequestParam("uuid") UUID billingUuid,
-            HttpServletRequest request,
-            Model model,
-            HttpSession session) {
-        String userUuidStr = (String) session.getAttribute("USER_ID");
-
-        if (userUuidStr == null) {
-            return "redirect:/";
-        }
-
-        UUID userUuid;
-        try {
-            userUuid = UUID.fromString(userUuidStr);
-        } catch (IllegalArgumentException e) {
-            return "redirect:/";
-        }
-
-        Optional<User> userOpt = userService.findById(userUuid);
-
-        if (userOpt.isEmpty()) {
-            return "redirect:/";
-        }
-
-        Optional<Session> sessionOpt = sessionService.findById(billingUuid);
-        System.out.println(sessionOpt.get());
-
-        return "billing";
-    }
-
     @GetMapping("/billings")
     public String getBillings(
             HttpServletRequest request,
@@ -199,6 +168,41 @@ public class DashBoardController {
         }
 
         return "billings";
+    }
+
+    @GetMapping("/billing")
+    public String billing(
+            @RequestParam("uuid") UUID billingUuid,
+            HttpServletRequest request,
+            Model model,
+            HttpSession session) {
+        String userUuidStr = (String) session.getAttribute("USER_ID");
+
+        if (userUuidStr == null) {
+            return "redirect:/";
+        }
+
+        UUID userUuid;
+        try {
+            userUuid = UUID.fromString(userUuidStr);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/";
+        }
+
+        Optional<User> userOpt = userService.findById(userUuid);
+
+        if (userOpt.isEmpty()) {
+            return "redirect:/";
+        }
+
+        Optional<Session> sessionOpt = sessionService.findById(billingUuid);
+        if (sessionOpt.isEmpty()) {
+            return "redirect:/";
+        }
+        model.addAttribute("userPhoneNumber", userOpt.get().getPhone());
+        model.addAttribute("billingSession", sessionOpt.get());
+
+        return "billing";
     }
 
 }

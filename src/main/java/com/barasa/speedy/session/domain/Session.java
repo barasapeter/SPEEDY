@@ -19,7 +19,7 @@ public class Session {
     private String userName;
     private Double rpm;
     private UUID shopUuid;
-    private String bikeCode;
+    private String bikeCode; 
     private UUID userUuid;
     private Instant startTime;
     private Instant stopTime;

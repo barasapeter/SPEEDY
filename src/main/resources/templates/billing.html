@@ -1,12 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/logo.webp">
     <title>Billing - User</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Billing - M-Pesa Express</h1>
+<body class="bg-gray-100 min-h-screen p-6">
+    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-6">
+        <h1 class="text-2xl font-bold mb-6">Billing - M-Pesa Express</h1>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            <!-- User Info -->
+            <div class="p-4 border rounded-xl bg-gray-50">
+                <h2 class="text-lg font-semibold mb-2">User Info</h2>
+                <p><span class="font-medium">Name:</span> 
+                    <span th:text="${billingSession.userFullNames}">User Name</span>
+                </p>
+                <p><span class="font-medium">Phone Number:</span> 
+                    <span th:text="${userPhoneNumber}">User Phone Number</span>
+                </p>
+                <p>
+                    <img th:src="${billingSession.pictureURL}" 
+                        alt="User Picture" 
+                        class="w-24 h-24 rounded-full mt-2 object-cover">
+                </p>
+            </div>
+
+            <!-- Bike Info -->
+            <div class="p-4 border rounded-xl bg-gray-50">
+                <h2 class="text-lg font-semibold mb-2">Bike Info</h2>
+                <p><span class="font-medium">Bike</span> 
+                    <span th:text="${billingSession.bikeCode}">Bike123</span>
+                </p>
+                <p><span class="font-medium">ENTRY RPM</span> 
+                    <span th:text="${billingSession.rpm}">0.0</span>
+                </p>
+            </div>
+
+            <!-- Session Timing -->
+            <div class="p-4 border rounded-xl bg-gray-50">
+                <h2 class="text-lg font-semibold mb-2">Session Timing</h2>
+                <p><span class="font-medium">Start Time:</span> 
+                    <span th:text="${#dates.format(billingSession.startTime, 'dd MMM yyyy HH:mm')}">Start</span>
+                </p>
+                <p><span class="font-medium">Stop Time:</span> 
+                    <span th:text="${billingSession.stopTime != null ? #dates.format(billingSession.stopTime, 'dd MMM yyyy HH:mm') : 'In Progress'}">Stop</span>
+                </p>
+                <p><span class="font-medium">Duration (min):</span> 
+                    <span th:text="${#numbers.formatDecimal(billingSession.durationInMinutes, 0, 2)}">0.0</span>
+                </p>
+            </div>
+
+            <!-- Charges -->
+            <div class="p-4 border rounded-xl bg-gray-50">
+                <h2 class="text-lg font-semibold mb-2">Charges</h2>
+                <p><span class="font-medium">Charge Now:</span> 
+                    <span th:text="${billingSession.chargeNowFormatted}">Kshs. 0</span>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-6 flex justify-end gap-4">
+            <button class="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">Initiate STK Prompt</button>
+            <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition">Cancel</button>
+        </div>
+    </div>
 </body>
 </html>

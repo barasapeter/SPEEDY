@@ -277,7 +277,7 @@ public class SessionController {
         } else {
             
             Session clientRequestSession = existingSession.get();
-            result.put("message", "Initiating STK Push for session " + clientRequestSession + " via " + phoneNumber);
+            result.put("message", "Initiating STK Push for session via " + phoneNumber);
 
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }

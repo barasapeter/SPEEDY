@@ -165,4 +165,31 @@ public class DashBoardController {
         return "billing";
     }
 
+    @GetMapping("/billings")
+    public String getBillings(
+            HttpServletRequest request,
+            Model model,
+            HttpSession session) {
+        String userUuidStr = (String) session.getAttribute("USER_ID");
+
+        if (userUuidStr == null) {
+            return "redirect:/";
+        }
+
+        UUID userUuid;
+        try {
+            userUuid = UUID.fromString(userUuidStr);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/";
+        }
+
+        Optional<User> userOpt = userService.findById(userUuid);
+
+        if (userOpt.isEmpty()) {
+            return "redirect:/";
+        }
+
+        return "billings";
+    }
+
 }

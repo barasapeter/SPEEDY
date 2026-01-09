@@ -9,4 +9,5 @@ public interface SessionJpaRepository extends JpaRepository<SessionEntity, UUID>
     // List<SessionEntity> findByShopUuid(UUID id);
 
     List<SessionEntity> findByShopUuidAndStopTimeIsNull(UUID shopUuid);
+    List<SessionEntity> findByUserUuid(UUID userUuid);
 }

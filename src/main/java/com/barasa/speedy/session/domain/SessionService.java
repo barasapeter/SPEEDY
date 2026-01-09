@@ -77,6 +77,13 @@ public class SessionService implements SessionRepository {
     }
 
     @Override
+    public List<Session> findByUserUuid(UUID userUuid) {
+        return sessionJpa.findByUserUuid(userUuid).stream()
+                .map(Session::fromEntity)
+                .toList();
+    }
+
+    @Override
     public List<Session> findAll() {
         return sessionJpa.findAll().stream().map(Session::fromEntity).toList();
     }

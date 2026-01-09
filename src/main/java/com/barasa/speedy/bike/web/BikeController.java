@@ -78,7 +78,7 @@ public class BikeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
         }
 
-        Optional<Bike> bikeOpt = bikeService.findByCode(bikeCode);
+        Optional<Bike> bikeOpt = bikeService.findByCode(bikeCode); 
 
         Bike bike;
         if (bikeOpt.isPresent()) {

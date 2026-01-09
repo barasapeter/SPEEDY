@@ -189,6 +189,15 @@ public class DashBoardController {
             return "redirect:/";
         }
 
+        List<Session> sessionOpt = sessionService.findByUserUuid(userOpt.get().getUuid());
+        if (sessionOpt.isEmpty()) {
+            model.addAttribute("sessions", null);
+        } else {
+            List<Session> sessions = sessionService.findByUserUuid(userOpt.get().getUuid());
+            model.addAttribute("shop", shopService.findByOwner(userUuid.toString()).orElse(null));
+            model.addAttribute("sessions", sessions);
+        }
+
         return "billings";
     }
 

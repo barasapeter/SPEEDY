@@ -2,11 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Due Sessions</title>
+    <title>Billing Sessions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Due Sessions Display Here</h1>
-    
+<body class="bg-gray-100 p-6">
+    <div class="max-w-7xl mx-auto bg-white p-6 rounded-2xl shadow">
+        <h1 class="text-2xl font-bold mb-6">Billing Sessions</h1>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bike</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Charge</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Time</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stop Time</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr th:each="s : ${sessions}" class="hover:bg-gray-50">
+                        <td class="px-6 py-4" th:text="${s.userFullNames}">User Name</td>
+                        <td class="px-6 py-4" th:text="${s.bikeCode}">Bike123</td>
+                        <td class="px-6 py-4" th:text="${s.durationInMinutes}">0</td>
+                        <td class="px-6 py-4" th:text="${s.chargeNow}">0</td>
+                        <td class="px-6 py-4" th:text="${s.startTime}">Start Time</td>
+                        <td class="px-6 py-4" th:text="${s.stopTime != null ? s.stopTime : 'Ongoing'}">Stop Time</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

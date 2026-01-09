@@ -2,6 +2,7 @@ package com.barasa.speedy.session.web;
 
 import com.barasa.speedy.bike.domain.Bike;
 import com.barasa.speedy.bike.domain.BikeService;
+import com.barasa.speedy.common.util.MpesaApiService;
 import com.barasa.speedy.common.util.PhoneNumberValidatorAndStandardizer;
 import com.barasa.speedy.session.domain.Session;
 import com.barasa.speedy.session.domain.SessionReport;
@@ -37,13 +38,20 @@ public class SessionController {
     private final ShopService shopService;
     private final BikeService bikeService;
     private final SessionService sessionService;
+    private final MpesaApiService mpesaApiService;
 
-    public SessionController(UserService userService, ShopService shopService, BikeService bikeService,
-            SessionService sessionService) {
+    public SessionController(
+            UserService userService,
+            ShopService shopService,
+            BikeService bikeService,
+            SessionService sessionService,
+            MpesaApiService mpesaApiService) {
+
         this.userService = userService;
         this.shopService = shopService;
         this.bikeService = bikeService;
         this.sessionService = sessionService;
+        this.mpesaApiService = mpesaApiService;
     }
 
     @PostMapping("/create")
@@ -248,40 +256,81 @@ public class SessionController {
     }
 
     @PostMapping("/initiate-stk-push")
-    public ResponseEntity<Map<String, String>> initiateNiPush(@RequestBody Map<String, Object> payload,
+    public ResponseEntity<Map<String, Object>> initiateNiPush(
+            @RequestBody Map<String, Object> payload,
             HttpSession session) {
-        Map<String, String> result = new HashMap<>();
+
+        Map<String, Object> result = new HashMap<>();
+
+        /* ---------- AUTH ---------- */
 
         String userUuidStr = (String) session.getAttribute("USER_ID");
+        if (userUuidStr == null) {
+            result.put("message", "You need to log in first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+        }
 
         UUID userUuid;
         try {
             userUuid = UUID.fromString(userUuidStr);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.ok(result);
-        }
-
-        Optional<User> userOpt = userService.findById(userUuid);
-
-        if (userOpt.isEmpty()) {
-            result.put("message", "You need to log in first.");
+            result.put("message", "Invalid user session.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
-        UUID sessionUuid = UUID.fromString((String) payload.get("sessionUuid"));
-        String phoneNumber = (String) payload.get("phoneNumber");
-        Optional<Session> existingSession = sessionService.findById(sessionUuid);
-        if (!existingSession.isPresent()) {
-            result.put("message", "Invalid Session ID passed.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-        } else {
-            
-            Session clientRequestSession = existingSession.get();
-            result.put("message", "Initiating STK Push for session via " + phoneNumber);
-
-            return ResponseEntity.status(HttpStatus.OK).body(result);
+        Optional<User> userOpt = userService.findById(userUuid);
+        if (userOpt.isEmpty()) {
+            result.put("message", "User not found.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
+        /* ---------- INPUT ---------- */
+
+        String sessionUuidStr = (String) payload.get("sessionUuid");
+        String phoneNumber = (String) payload.get("phoneNumber");
+
+        if (sessionUuidStr == null || phoneNumber == null) {
+            result.put("message", "sessionUuid and phoneNumber are required.");
+            return ResponseEntity.badRequest().body(result);
+        }
+
+        UUID sessionUuid;
+        try {
+            sessionUuid = UUID.fromString(sessionUuidStr);
+        } catch (IllegalArgumentException e) {
+            result.put("message", "Invalid session UUID.");
+            return ResponseEntity.badRequest().body(result);
+        }
+
+        Optional<Session> existingSession = sessionService.findById(sessionUuid);
+        if (existingSession.isEmpty()) {
+            result.put("message", "Invalid Session ID passed.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+
+        /* ---------- MPESA ---------- */
+
+        Session billingSession = existingSession.get();
+
+        try {
+            // amount MUST be string for MPesa
+            String amount = String.valueOf(billingSession.getChargeNow());
+
+            var mpesaResponse = mpesaApiService.initiateStkPush(phoneNumber, amount);
+
+            result.put("message", "STK Push initiated successfully.");
+            result.put("mpesaResponse", mpesaResponse);
+
+            return ResponseEntity.ok(result);
+
+        } catch (Exception e) {
+            result.put("message", "Failed to initiate STK Push.");
+            result.put("error", e.getMessage());
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(result);
+        }
     }
 
 }

@@ -6,6 +6,8 @@
     <link rel="icon" type="image/x-icon" href="/logo.webp">
     <title>Billing - User</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100 min-h-screen p-6">
     <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-6">
@@ -17,10 +19,10 @@
             <div class="p-4 border rounded-xl bg-gray-50">
                 <h2 class="text-lg font-semibold mb-2">User Info</h2>
                 <p><span class="font-medium">Name:</span> 
-                    <span th:text="${billingSession.userFullNames}">User Name</span>
+                    <span th:text="${billingSession.userFullNames}" id="userName">User Name</span>
                 </p>
                 <p><span class="font-medium">Phone Number:</span> 
-                    <span th:text="${userPhoneNumber}">User Phone Number</span>
+                    <span th:text="${userPhoneNumber}" id="userPhoneNumber">254700123456</span>
                 </p>
                 <p>
                     <img th:src="${billingSession.pictureURL}" 
@@ -66,9 +68,41 @@
 
         <!-- Action Buttons -->
         <div class="mt-6 flex justify-end gap-4">
-            <button class="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">Initiate STK Prompt</button>
-            <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition">Cancel</button>
+            <button id="initStkBtn" 
+                    class="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                Initiate STK Prompt
+            </button>
         </div>
     </div>
+
+    <script>
+        document.getElementById('initStkBtn').addEventListener('click', () => {
+            const phoneNumber = document.getElementById('userPhoneNumber').innerText.trim();
+
+            Swal.fire({
+                title: 'Confirm STK Push',
+                html: `
+                    <p>This Action will send a NI Push to the user</p>
+                    <input type="text" id="swalPhone" class="swal2-input" value="${phoneNumber}" placeholder="Enter phone number">
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Send Prompt',
+                cancelButtonText: 'Cancel',
+                preConfirm: () => {
+                    const input = Swal.getPopup().querySelector('#swalPhone').value;
+                    if (!input) {
+                        Swal.showValidationMessage('Phone number cannot be empty');
+                    }
+                    return input;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const phone = result.value;
+                    console.log('Send STK Push to:', phone);
+                    Swal.fire('Success!', `STK Push sent to ${phone}`, 'success');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

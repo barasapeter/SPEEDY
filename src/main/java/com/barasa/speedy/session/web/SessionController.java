@@ -247,5 +247,41 @@ public class SessionController {
 
     }
 
-}
+    @PostMapping("/initiate-stk-push")
+    public ResponseEntity<Map<String, String>> initiateNiPush(@RequestBody Map<String, Object> payload,
+            HttpSession session) {
+        Map<String, String> result = new HashMap<>();
 
+        String userUuidStr = (String) session.getAttribute("USER_ID");
+
+        UUID userUuid;
+        try {
+            userUuid = UUID.fromString(userUuidStr);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.ok(result);
+        }
+
+        Optional<User> userOpt = userService.findById(userUuid);
+
+        if (userOpt.isEmpty()) {
+            result.put("message", "You need to log in first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+        }
+
+        UUID sessionUuid = UUID.fromString((String) payload.get("sessionUuid"));
+        String phoneNumber = (String) payload.get("phoneNumber");
+        Optional<Session> existingSession = sessionService.findById(sessionUuid);
+        if (!existingSession.isPresent()) {
+            result.put("message", "Invalid Session ID passed.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        } else {
+            
+            Session clientRequestSession = existingSession.get();
+            result.put("message", "Initiating STK Push for session " + clientRequestSession + " via " + phoneNumber);
+
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+
+    }
+
+}

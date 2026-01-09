@@ -70,7 +70,7 @@ public class BikeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
         }
 
-        String bikeCode = (String) payload.get("bikeCode");
+        String bikeCode = (String) payload.get("bikeCode"); 
         Double rpm = Double.valueOf((String) payload.get("rpm"));
 
         if (Math.round(rpm) == 0) {

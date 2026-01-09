@@ -5,11 +5,36 @@
     <title>Billing Sessions</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-7xl mx-auto bg-white p-6 rounded-2xl shadow">
-        <h1 class="text-2xl font-bold mb-6">Billing Sessions</h1>
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
+<body class="bg-gray-100 p-4 sm:p-6">
+    <div class="max-w-7xl mx-auto bg-white p-4 sm:p-6 rounded-2xl shadow">
+        <h1 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Billing Sessions</h1>
+
+        <!-- Mobile: cards, Desktop: table -->
+        <div class="block md:hidden space-y-4">
+            <div th:each="s : ${sessions}" class="bg-gray-50 rounded-xl p-4 shadow hover:bg-gray-100">
+                <div class="flex justify-between items-center mb-2">
+                    <h2 class="font-semibold text-gray-700" th:text="${s.userFullNames}">User Name</h2>
+                    <button 
+                        class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+                        type="button"
+                        th:attr="data-uuid=${s.uuid}"
+                        onclick="checkout(this)">
+                        Check Out
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                    <div><span class="font-medium">Bike:</span> <span th:text="${s.bikeCode}">Bike123</span></div>
+                    <div><span class="font-medium">Duration:</span> <span th:text="${s.durationInMinutes}">0</span></div>
+                    <div><span class="font-medium">Charge:</span> <span th:text="${s.chargeNow}">0</span></div>
+                    <div><span class="font-medium">Start:</span> <span th:text="${s.startTime}">Start Time</span></div>
+                    <div><span class="font-medium">Stop:</span> <span th:text="${s.stopTime != null ? s.stopTime : 'Ongoing'}">Stop Time</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop table -->
+        <div class="hidden md:block overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 table-auto">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
@@ -39,17 +64,16 @@
                             </button>
                         </td>
                     </tr>
-
-                    <script>
-                    function checkout(button) {
-                        const uuid = button.dataset.uuid;
-                        window.location.href = '/billing?uuid=' + uuid;
-                    }
-                    </script>
-
                 </tbody>
             </table>
         </div>
     </div>
+
+    <script>
+        function checkout(button) {
+            const uuid = button.dataset.uuid;
+            window.location.href = '/billing?uuid=' + uuid;
+        }
+    </script>
 </body>
 </html>

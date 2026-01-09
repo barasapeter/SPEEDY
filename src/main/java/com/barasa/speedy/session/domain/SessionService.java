@@ -62,13 +62,6 @@ public class SessionService implements SessionRepository {
         return sessionJpa.findById(id).map(Session::fromEntity);
     }
 
-    // @Override
-    // public List<Session> findByShopUuid(UUID id) {
-    // return sessionJpa.findByShopUuid(id).stream()
-    // .map(Session::fromEntity)
-    // .toList();
-    // }
-
     @Override
     public List<Session> findByShopUuid(UUID id) {
         return sessionJpa.findByShopUuidAndStopTimeIsNull(id).stream()

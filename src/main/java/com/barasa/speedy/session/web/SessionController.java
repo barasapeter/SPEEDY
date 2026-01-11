@@ -2,7 +2,6 @@ package com.barasa.speedy.session.web;
 
 import com.barasa.speedy.bike.domain.Bike;
 import com.barasa.speedy.bike.domain.BikeService;
-import com.barasa.speedy.common.util.MpesaApiService;
 import com.barasa.speedy.common.util.PhoneNumberValidatorAndStandardizer;
 import com.barasa.speedy.session.domain.Session;
 import com.barasa.speedy.session.domain.SessionReport;
@@ -38,20 +37,17 @@ public class SessionController {
     private final ShopService shopService;
     private final BikeService bikeService;
     private final SessionService sessionService;
-    private final MpesaApiService mpesaApiService;
 
     public SessionController(
             UserService userService,
             ShopService shopService,
             BikeService bikeService,
-            SessionService sessionService,
-            MpesaApiService mpesaApiService) {
+            SessionService sessionService) {
 
         this.userService = userService;
         this.shopService = shopService;
         this.bikeService = bikeService;
         this.sessionService = sessionService;
-        this.mpesaApiService = mpesaApiService;
     }
 
     @PostMapping("/create")
@@ -262,7 +258,6 @@ public class SessionController {
 
         Map<String, Object> result = new HashMap<>();
 
-        /* ---------- AUTH ---------- */
 
         String userUuidStr = (String) session.getAttribute("USER_ID");
         if (userUuidStr == null) {
@@ -284,7 +279,6 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
         }
 
-        /* ---------- INPUT ---------- */
 
         String sessionUuidStr = (String) payload.get("sessionUuid");
         String phoneNumber = (String) payload.get("phoneNumber");
@@ -308,18 +302,12 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
 
-        /* ---------- MPESA ---------- */
-
         Session billingSession = existingSession.get();
 
         try {
-            // amount MUST be string for MPesa
             String amount = String.valueOf(billingSession.getChargeNow());
 
-            var mpesaResponse = mpesaApiService.initiateStkPush(phoneNumber, amount);
-
-            result.put("message", "STK Push initiated successfully.");
-            result.put("mpesaResponse", mpesaResponse);
+            result.put("message", "STK Push initiated successfully. Amount: " + amount);
 
             return ResponseEntity.ok(result);
 

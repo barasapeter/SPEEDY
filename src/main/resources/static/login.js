@@ -14,19 +14,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        Swal.fire({
-            html: `                
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                <img src="hold-on.gif" alt="Loading..." 
-                    style="width: 80px; height: 80px;">
-                <h1 style="margin: 15px;">Authenticating</h1>
-                <p>Hold on, we are verifying your sign-in credentials...</p>
-                </div>
-            `,
-            showConfirmButton: false,
-            showCancelButton: true,
-            allowOutsideClick: false,
-        });
+        // Swal.fire({
+        //     html: `                
+        //         <div style="display: flex; flex-direction: column; align-items: center;">
+        //         <img src="hold-on.gif" alt="Loading..." 
+        //             style="width: 80px; height: 80px;">
+        //         <h1 style="margin: 15px;">Authenticating</h1>
+        //         <p>Hold on, we are verifying your sign-in credentials...</p>
+        //         </div>
+        //     `,
+        //     showConfirmButton: false,
+        //     showCancelButton: true,
+        //     allowOutsideClick: false,
+        // });
+
+        registerButton.innerHTML = "Logging in...";
 
         const payload = { email, password };
 
@@ -39,7 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
 
-            Swal.close();
+            // Swal.close();
+            registerButton.innerHTML = "Log In";
 
             if (response.ok) {
                 window.location.href = "/dashboard";

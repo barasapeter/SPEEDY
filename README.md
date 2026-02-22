@@ -180,9 +180,9 @@ Add the following configuration:
 spring.application.name=speedy
 
 # Database Configuration
-spring.datasource.url=jdbc:postgresql://localhost:5432/speedy
-spring.datasource.username=postgres
-spring.datasource.password=1988
+spring.datasource.url=jdbc:postgresql://localhost:5432/db-name
+spring.datasource.username=username
+spring.datasource.password=your-password
 
 # JPA/Hibernate Configuration
 spring.jpa.hibernate.ddl-auto=update
@@ -193,8 +193,8 @@ spring.jpa.properties.hibernate.format_sql=true
 spring.session.jdbc.initialize-schema=always
 
 # Security
-spring.security.user.name=admin
-spring.security.user.password=secret
+spring.security.user.name=name-here
+spring.security.user.password=secret-here
 
 # Server Configuration
 server.address=0.0.0.0
